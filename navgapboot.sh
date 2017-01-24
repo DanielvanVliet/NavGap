@@ -9,7 +9,7 @@ export USER HOME
 case "$1" in
 	start) ### only this is currently played
 		echo "### Updating List ###"
-		sudo iwlist wlan0 scan |grep ESSID > ~/github/NavGap/log.csv
+		sudo iwlist wlan0 scan |grep ESSID > ~/home/pi/github/NavGap/log.csv
 		;;
 	stop) ## update?
 		echo "### Stop Bootup ###"
