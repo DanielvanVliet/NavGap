@@ -1,4 +1,7 @@
+from graph_importer import *
+
 def dijkstra(graph_dict, start, end):
+    print("Graph used: ",graph_dict)
     # create empty dictionary to hold the distance of each node to the start node
     distances = {}
 
@@ -55,9 +58,9 @@ def dijkstra(graph_dict, start, end):
     # return the path with distance
     return path[::-1], distances[end]
 
-graphe = {'A':{'B':1, 'C':3},'B':{'A':1, 'C':3}, 'C':{'A':3, 'B':3}}
-graphe2 = {'A': {'B':1, 'D':5}, 'B': {'A':1, 'C':2, 'H':1}, 'C':{'B':2, 'D':3}, 'D':{'A':5, 'C':3, 'E':1}, 'E':{'D':1, 'F':3}, 'F':{'E':3, 'G':2}, 'G':{'F':2}, 'H':{'B':1, 'I':2}, 'I':{'H':2, 'J':1}, 'J':{'I':1}}
-while True:
-    startnode = input('startnode: ')
-    endnode = input('endnode: ')
-    print(dijkstra(graphe2, startnode, endnode))
+#graph = {'A':{'B':1, 'C':3},'B':{'A':1, 'C':3}, 'C':{'A':3, 'B':3}}
+#graph2 = {'A': {'B':1, 'D':5}, 'B': {'A':1, 'C':2, 'H':1}, 'C':{'B':2, 'D':3}, 'D':{'A':5, 'C':3, 'E':1}, 'E':{'D':1, 'F':3}, 'F':{'E':3, 'G':2}, 'G':{'F':2}, 'H':{'B':1, 'I':2}, 'I':{'H':2, 'J':1}, 'J':{'I':1}}
+graph = import_graph()
+startnode = 'B'
+endnode = 'C'
+print(dijkstra(graph, startnode, endnode))
