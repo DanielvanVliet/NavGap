@@ -8,10 +8,8 @@ HOME=/root
 export USER HOME
 case "$1" in
 	start) ### only this is currently played
-		echo "### Start Bootup ###"
-		#sudo iwlist wlan0 scan |grep ESSID
-		sudo iwlist wlan0 scan |grep ESSID > /home/pi/navgap/log.csv
-		#echo "Start Bootup" >> /home/pi/navgap/log.csv
+		echo "### Updating List ###"
+		sudo iwlist wlan0 scan |grep ESSID > ~/github/NavGap/log.csv
 		;;
 	stop) ## update?
 		echo "### Stop Bootup ###"
