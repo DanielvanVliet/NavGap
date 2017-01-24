@@ -2,6 +2,7 @@
 ### INFO
 # Boots up NavGap.sh in /home/pNavGap/
 ### END INFO
+# git test add this text woowooo
 
 USER=root
 HOME=/root
