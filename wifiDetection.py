@@ -32,12 +32,17 @@ def createUI():
     base = tkinter.Tk()
     canvas = tkinter.Canvas(base, width=WIDTH, height=HEIGHT)
     canvas.grid()
+    base.overrideredirect(True)
+    base.geometry("{0}x{1}+0+0".format(base.winfo_screenwidth(), base.winfo_screenheight()))
+
 
     # (loc X, locY, x, y)
     o1 = canvas.create_oval(x0, x0, y0, y0, fill=blue, activefill=yellow)
     o2 = canvas.create_oval(x1, x1, y1, y1, fill=blue, activefill=yellow)
     o3 = canvas.create_oval(x2, x2, y2, y2, fill=blue, activefill=yellow)
 
+    exit = tkinter.Button(text='exit', command=quit)
+    exit.grid()
     #canvas.create_oval()
     # STD stndard algoritme
 
