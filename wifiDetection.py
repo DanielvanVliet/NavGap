@@ -6,9 +6,8 @@ import tkinter
 
 ## Variables ##
 conList = [
-        'MarcKYS',
-        'essidhere',
-        'Connectify-me'
+        'Connectify-me',
+        'RPI_AP2'
 ]
 
 EssidList = []
@@ -82,6 +81,8 @@ def changeNodeColor(canvas, node, color):
     canvas.itemconfig(node, fill=color)
 
 def createUI():
+    global conList
+    global tlist
     running = True
     x0, y0 = 10, 50
     x1, y1 = 50, 90
@@ -91,8 +92,8 @@ def createUI():
     base = tkinter.Tk()
     canvas = tkinter.Canvas(base, width=WIDTH, height=HEIGHT)
     canvas.grid()
-    base.overrideredirect(True)
-    base.geometry("{0}x{1}+0+0".format(base.winfo_screenwidth(), base.winfo_screenheight()))
+    #base.overrideredirect(True)
+    #base.geometry("{0}x{1}+0+0".format(base.winfo_screenwidth(), base.winfo_screenheight()))
 
 
     # (loc X, locY, x, y)
@@ -124,13 +125,15 @@ def createUI():
         print('update node color')
         print(counter)
         canvas.coords(load, 100, 200, counter, 250)
-        for eachCon in conList:
+        for eachCon in conList:  
             for eachT in tlist:
-                #print('name: {}, signal: {}'.format(eachT[0], eachT[1]))
-                if eachT[0][0] == eachCon: # and eachT[1] > 40:
-                    curList.append(eachT[0], eachT[1], True)
+                print('name: {}, signal: {}'.format(eachT[0], eachT[1]))
+                print('checking if {} == {}'.format(eachCon, eachT))
+                if eachCon == eachT[0]: # and eachT[1] > 40:
+                    curList.append([eachT[0], eachT[1], True])
+                    print('####')
                     print('name: {}, signal: {}'.format(eachT[0], eachT[1]))
-
+                elif eachT[0] 
                     changeNodeColor(canvas, o3, yellow)
 
 
@@ -139,8 +142,9 @@ def createUI():
         #if counter <= 100:
             #counter += 1
             #running = False
-        if counter == 100:
+        if counter == 10:
             running = False
+            break
         counter += 1
 
 createUI()
@@ -148,6 +152,6 @@ createUI()
 print()
 print()
 for each in tlist:
-	print('{} : {}'.format(each[0],each[1]))
+        print('{} : {}'.format(each[0],each[1]))
 
 
