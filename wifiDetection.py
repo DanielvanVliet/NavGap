@@ -104,7 +104,7 @@ def createUI():
     def stopApp():
         global running
         running = False
-
+        
     counter = 0
 
     exit = tkinter.Button(text='exit', command = stopApp())
@@ -122,6 +122,9 @@ def createUI():
     base.update()
     ## Update Loop ##
     while running == True:
+        EssidList = []
+        SignalList = []
+        tlist = []
         os.system(updateCmd)
         with open('log.csv', 'r') as myCSVFile:
             reader = csv.reader(myCSVFile)
@@ -143,24 +146,32 @@ def createUI():
         for signal in EssidList:
                 tlist[count].append(signal)
                 count +=1
+        print(tlist)
         time.sleep(0.1)
         print('update node color')
         print(counter)
         canvas.coords(load, 100, 200, counter, 250)
-        for eachCon in conList:  
-            for eachT in tlist:
-                print('name: {}, signal: {}'.format(eachT[0], eachT[1]))
-                print('checking if {} == {}'.format(eachCon, eachT))
-                if eachCon == eachT[0]: # and eachT[1] > 40:
-                    curList.append([eachT[0], eachT[1], True])
-                    print('####')
-                    print('name: {}, signal: {}'.format(eachT[0], eachT[1]))
-
+        for eachCon in conList:
+                for eachCur in curList:
+                        if eachCon == eachCur[0]:
+                            for eachT in tlist:
+                                print('name: {}, signal: {}'.format(eachT[0], eachT[1]))
+                                print('checking if {} == {}'.format(eachCon, eachT))
+                                if eachCon == eachT[0]: # and eachT[1] > 40:
+                                    curList.append([eachT[0], eachT[1], True])
+                                    print('####')
+                                    print('name: {}, signal: {}'.format(eachT[0], eachT[1]))
+                                    changeNodeColor(canvas, o3, yellow)
+        #print(curList)
         for each in curList:
-            if each not in tlist:
-                each[2] = False
-            else:
-                each[2] = True
+                for eachT in tlist:
+                    if each[0] is eachT[0]:
+                        each[2] = True
+                        changeNodeColor(canvas, o3, yellow)
+                        break
+                    else:
+                        each[2] = False
+                        changeNodeColor(canvas, o3, blue)
 
 
         base.update_idletasks()
