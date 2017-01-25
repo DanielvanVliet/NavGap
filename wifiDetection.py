@@ -120,7 +120,29 @@ def createUI():
     curList = []
     #base.mainloop()
     base.update()
+    ## Update Loop ##
     while running == True:
+        os.system(updateCmd)
+        with open('log.csv', 'r') as myCSVFile:
+            reader = csv.reader(myCSVFile)
+            row = 0
+            for each in reader:
+                #print(each)
+                row += 1
+                if row % 2 == 1: #if even
+                    #print(each[0][48:52])
+                    EssidList.append(each[0][48:51])
+                else:
+                    #print(each[0][27:-2])
+                    SignalList.append(each[0][27:-1])
+                    checkConnection(each[0][27:-1])
+
+        for essid in SignalList:
+                tlist.append([essid])
+        count = 0
+        for signal in EssidList:
+                tlist[count].append(signal)
+                count +=1
         time.sleep(0.1)
         print('update node color')
         print(counter)
@@ -133,8 +155,12 @@ def createUI():
                     curList.append([eachT[0], eachT[1], True])
                     print('####')
                     print('name: {}, signal: {}'.format(eachT[0], eachT[1]))
-                elif eachT[0] 
-                    changeNodeColor(canvas, o3, yellow)
+
+        for each in curList:
+            if each not in tlist:
+                each[2] = False
+            else:
+                each[2] = True
 
 
         base.update_idletasks()
@@ -142,7 +168,7 @@ def createUI():
         #if counter <= 100:
             #counter += 1
             #running = False
-        if counter == 10:
+        if counter == 2000:
             running = False
             break
         counter += 1
