@@ -116,7 +116,7 @@ def createUI():
                 elif spotList[spot][0] == False:
                     print('turn o3 off')
                     changeNodeColor(canvas, o3, blue)
-            if spot == 'Connectify_me':
+            if spot == 'Connectify-me':
                 print(spotList[spot])
                 if spotList[spot][0] == True:
                     print('turn o1 on')
