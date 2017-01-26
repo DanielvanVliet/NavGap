@@ -1,11 +1,12 @@
 import time
 import tkinter
-#coords between (10,10) and (415, 295), otherwise it won't be drawn ON the canvas
-nodeCoords = {'nodeA': [90, 180], 'nodeB': [50, 70], 'nodeC': [120, 200]}
+nodeCoords = {'A': [90, 180], 'B': [50, 70], 'C': [120, 200]}
 ovalSize = 8
-list = ['nodeA', 'nodeB', 'nodeC']
 dictOvals = {}
 dictLines = {}
+coordA = nodeCoords['A']
+coordB = nodeCoords['B']
+coordC = nodeCoords['C']
 path = ['B', 'A', 'C']
 
 def createOval(coord):
@@ -41,10 +42,13 @@ def createUI():
     canvas.grid()
     for each in nodeCoords:
         createOval(nodeCoords[each])
-        dictOvals[each] = canvas.create_oval(node[0][0], node[0][1], node[1][0], node[1][1], fill=blue, activefill=red)
-        dictLines[each]
-
-
+        dictOvals['node'+each] = [canvas.create_oval(node[0][0], node[0][1], node[1][0], node[1][1], fill=blue, activefill=red, each.get()]
+        dictLines['lines'+each]
+    lineAB = canvas.create_line(coordB[0], coordB[1], coordA[0], coordA[1])
+    lineAC = canvas.create_line(coordC[0], coordC[1], coordA[0], coordA[1])
+    LineCB = canvas.create_line(coordC[0], coordC[1], coordB[0], coordB[1])
+    print(dictOvals)
+    print(dictLines)
     """
     oAB = canvas.create_line(coordB[0], coordB[1], coordA[0], coordA[1])
     oCA = canvas.create_line(coordC[0], coordC[1], coordA[0], coordA[1])
@@ -62,4 +66,5 @@ def createUI():
         canvas.itemconfig(dictOvals['nodeA'], fill=yellow)
         canvas.itemconfig(dictOvals['nodeB'], fill=yellow)
         canvas.itemconfig(dictOvals['nodeC'], fill=yellow)
+        canvas.itemconfig(lineAB, fill = red)
 createUI()
