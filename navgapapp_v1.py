@@ -72,7 +72,7 @@ def createUI():
     WIDTH, HEIGHT = 420, 300
     root = tkinter.Tk()
     canvas = tkinter.Canvas(root, width=WIDTH, height=HEIGHT)
-    canvas.grid()
+    canvas.pack()
 
     # drawing test ovals
     x0, y0 = 10, 50
@@ -84,7 +84,7 @@ def createUI():
     o3 = canvas.create_oval(x2, x2, y2, y2, fill=blue, activefill=red)
 
     exit = tkinter.Button(text='exit', command=lambda :stopApp(root))
-    exit.grid()
+    exit_place = canvas.create_window(10, 10, window=exit)
 
     while running:
         root.update_idletasks()
