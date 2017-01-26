@@ -44,10 +44,13 @@ def updateList():
             row += 1
             essid = line[0][27:-1]
             signal = line[0][49:51]
-            print(line)
+            print()
+            #print(line)
+            print(essid)
+            print(signal)
             if row % 2 == 1:
                 rowdata = signal
-                #print(rowdata)
+                print(rowdata)
             if essid == spot and int(rowdata) <= 70: # -75 = range limiter
                 print('{} set to true, breaking for loop'.format(essid))
                 spotDict[spot][0] = True
@@ -144,7 +147,7 @@ def createUI():
 
     counter = 0
     while running:
-        if counter > 1000:
+        if counter > 5000:
             updateList()
             counter = -1
 
@@ -156,7 +159,7 @@ def createUI():
 
 ## app boot loop ##
 while True:
-    text = input(' | null = update list \n | break = nuke app \n | start = start app \n ')
+    text = input(' | null = update list \n | break = nuke app \n | start = start app \n >')
     if text == 'break':
         break
     # elif text == 'start':
