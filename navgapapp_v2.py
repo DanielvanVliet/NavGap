@@ -7,8 +7,8 @@ import subprocess
 
 #spotdict name : [connection, strength, loc X, loc Y]
 spotDict = {
-    'RPI_AP2' : [False, 0, 90, 180],
-    'Connectify-me' : [False, 0, 50, 70],
+    'RPI_AP2' : [False, 0, 50, 50],
+    'Connectify-me' : [False, 0, 180, 70],
     'tempMichelLoc' : [False, 0, 220, 50],
     'NogEenTest' : [False, 0, 230, 250]
 }
@@ -42,21 +42,21 @@ def updateList():
         row = 0
         for line in result.split('\n'):
             row += 1
-            essid = line[0][27:-1]
-            signal = line[0][49:51]
-            print()
-            #print(line)
-            print(essid)
-            print(signal)
+            essid = line[27:-1]
+            signal = line[49:51]
+            #print(essid)
+            #print(signal)
             if row % 2 == 1:
                 rowdata = signal
-                print(rowdata)
+                #print(rowdata)
             if essid == spot and int(rowdata) <= 70: # -75 = range limiter
-                print('{} set to true, breaking for loop'.format(essid))
+                print('{} set to true, breaking for loop, current str: {}'.format(essid, rowdata))
                 spotDict[spot][0] = True
                 spotDict[spot][1] = rowdata
                 break
             else:
+                if spotDict[spot][0] == True and essid == spot:
+                    print('{} set to false, last str: {}'.format(essid, rowdata))
                 spotDict[spot][0] = False
                 #print('{} set to false'.format(essid))
 
@@ -104,6 +104,8 @@ def createOval(canvas, spotName, x, y):
 
 def createConnection(canvas, point1, point2):
     # (x1, y1, x2, y2)
+    print('creating connection between {} at x{},y{}and {} at x{},y{}'.format(point1,spotDict[point1][2], spotDict[point1][3],
+                                                                               point2,spotDict[point2][2], spotDict[point2][3]))
     canvas.create_line(spotDict[point1][2], spotDict[point1][3], spotDict[point2][2], spotDict[point2][3])
 
 def changeNodeColor(canvas, spotName, color):
@@ -132,8 +134,8 @@ def createUI():
     canvas = tkinter.Canvas(root, width=WIDTH, height=HEIGHT)
     canvas.pack()
 
-    root.overrideredirect(True)
-    root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
+    #root.overrideredirect(True)
+    #root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
 
     for con in connectDict:
         createConnection(canvas, con, connectDict[con])
@@ -147,7 +149,7 @@ def createUI():
 
     counter = 0
     while running:
-        if counter > 5000:
+        if counter > 500:
             updateList()
             counter = -1
 
@@ -159,17 +161,11 @@ def createUI():
 
 ## app boot loop ##
 while True:
+    updateList()
     text = input(' | null = update list \n | break = nuke app \n | start = start app \n >')
     if text == 'break':
         break
-    # elif text == 'start':
-        #createUI()
+    elif text == 'start':
+        createUI()
 
-    updateList()
     print(spotDict)
-    #createUI()
-    #output = subprocess.check_output(updateCmd, shell=True)
-    #print(output)
-    #print(commands.getstatusoutput('updateCmd')
-    #print(commands.getstatusoutput(updateCmd))
-    #print(spotDict)
