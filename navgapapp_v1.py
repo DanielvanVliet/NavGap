@@ -124,6 +124,11 @@ def createUI():
                 elif spotList[spot][0] == False:
                     print('turn o1 off')
                     changeNodeColor(canvas, o1, blue)
+            if spotList['Connectify-me'][0] and spotList['RPI_AP2'][0]:
+                print('turning o2 on')
+                changeNodeColor(canvas, o2, yellow)
+            else:
+                changeNodeColor(canvas, o2, blue)
 
         root.update_idletasks()
         root.update()
