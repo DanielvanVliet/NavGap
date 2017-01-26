@@ -17,29 +17,27 @@ def b2():
 def gaan():
     print('MAAK HIER CODE VOOR!!!!!!!!!!!!!!!!1')
 
-root = Tk()
+root = Tk() #Tk() is de window
 
-WIDTH, HEIGHT = 475, 280
-label = Canvas(root, width=WIDTH, height=HEIGHT, bg="green")
-label.grid(row=6, column=6, sticky=NW)
+WIDTH, HEIGHT = 475, 280 #Grootte van het groene canvas
+label = Canvas(root, width=WIDTH, height=HEIGHT, bg="green") #Dit is de canvas
+label.grid(row=6, column=6, sticky=NW) #Plaatsing canvas
 
-menu = Menu(root)
+menu = Menu(root) #Aanmaken van de widget voor dropdown, geplaatst in de window
 root.config(menu=menu)
 
 locatie= Menu(menu)
-menu.add_cascade(label="Locatie", menu=locatie)
-locatie.add_command(label="A", command=a1)
-locatie.add_command(label="B", command=b1)
-#locatie.add_separator()
-#locatie.add_command(label="", command=doNothing())
+menu.add_cascade(label="Locatie", menu=locatie) #Dit is de dropdown voor locatie
+locatie.add_command(label="A", command=a1) #Optie 1 in de dropdown voor locatie
+locatie.add_command(label="B", command=b1) #Optie 2 in de dropdown voor locatie
 
 bestemming = Menu(menu)
-menu.add_cascade(label="Bestemming", menu=bestemming)
-bestemming.add_command(label="A", command=a2)
-bestemming.add_command(label="B", command=b2)
+menu.add_cascade(label="Bestemming", menu=bestemming) #Dit is de dropdown voor bestemming
+bestemming.add_command(label="A", command=a2) #Optie 1 in de dropdown bestemming
+bestemming.add_command(label="B", command=b2) #Optie 2 in de dropdown bestemming
 
-button1 = Button(root, text="Gaan!", command=gaan, fg="white", bg="black")
-button1.grid(row=2, sticky=E)
+button1 = Button(root, text="Gaan!", command=gaan, fg="white", bg="black") #Dit is de Gaan knop
+button1.grid(row=2, sticky=E) #Plaatsing van de knop
 
 
-root.mainloop()
+root.mainloop() #Dit zorgt ervoor dat het programma blijft runnen

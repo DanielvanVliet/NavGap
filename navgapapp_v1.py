@@ -3,50 +3,93 @@ import os
 import time
 import tkinter
 
-spotList = {
+spotDict = {
     'Connectify-me' : [False, 0],
     'RPI_AP2' : [False, 0]
 }
 
-## update essidlist ##
-EssidList = []
-SignalList = []
-tempList = {}
+## update essidList ##
+essidList = []
+signalList = []
+tempDict = {}
 updateCmd = 'sudo bash /home/pi/github/NavGap/navgapboot.sh start'
 
 def updateList():
-    global EssidList
-    global SignalList
-    global tempList
-    EssidList = []
-    SignalList = []
+    global spotDict
+    global essidList
+    global signalList
+    global tempDict
+    essidList = []
+    signalList = []
     print('# update list #')
     os.system(updateCmd)
-    with open('log.csv', 'r') as file:
-        reader = csv.reader(file)
-        row = 0
-        for each in reader:
-            row += 1
-            if row % 2 == 1:
-                SignalList.append(each[0][48:51])
-            else:
-                EssidList.append(each[0][27:-1])
 
-    # for essid in SignalList:
-    #     tempList.append([essid])
+    for spot in spotDict:
+        with open('log.csv', 'r') as file:
+            reader = csv.reader(file)
+            row = 0
+            print('##checking spot##')
+            print(spot)
+            for line in reader:
+                #print(line)
+                row += 1
+                print(spot)
+                print(line[0][27:-1])
+                if row % 2 == 1:
+                    rowdata = line[0][48:51]
+                    #print(rowdata)
+                elif str(spot) == line[0][27:-1]:
+                    print('####################')
+                    print('{} == {}'.format(line, spot))
+                    #print(line[0][27:-1])
+                    spotDict[line[0][27:-1]][0] = True
+                    spotDict[line[0][27:-1]][1] = rowdata
+                    print(spot, 'set to true, breaking for loop')
+                    break
+                elif line[0][27:-1] in spotDict:
+                     spotDict[line[0][27:-1]][0] = False
+                     print(spot, 'set to false')
+
+
+        # for each in reader:
+        #     #print(each)
+        #     row += 1
+        #     if row % 2 == 1:
+        #         #signalList.append(each[0][48:51])
+        #         rowdata = each[0][48:51]
+        #         #print(rowdata)
+        #     elif each[0][27:-1] in spotDict:
+        #         #essidList.append(each[0][27:-1])
+        #         spotDict[each[0][27:-1]][0] = True
+        #         spotDict[each[0][27:-1]][1] = rowdata
+
+
+    # for essid in signalList:
+    #     tempDict.append([essid])
     # counter = 0
-    # for signal in EssidList:
-    #     tempList[counter].append(signal)
+    # for signal in essidList:
+    #     tempDict[counter].append(signal)
     #     counter +=1
 
     counter = 0
 
-    for essid in EssidList:
-        #print('{} in EssidList'.format(essid))
-        if essid in spotList:
-            #print('{} in spotList'.format(essid))
-            tempList[essid] = SignalList[counter]
-        counter += 1
+    # for essid in essidList:
+    #     #print('{} in essidList'.format(essid))
+    #     if essid in spotDict:
+    #         #print('{} in spotDict'.format(essid))
+    #         #tempDict[essid] = signalList[counter]
+    #         spotDict[essid] = [True, signalList[counter]]
+    #         #spotDict[essid][0] = False
+    #     counter += 1
+
+    # for spot in spotDict:
+    #     if spot in tempDict:
+    #         print(spot, 'turning spot on')
+    #         spotDict[spot][0] = True
+    #         spotDict[spot][1] = tempDict[spot]
+    #     else:
+    #         print(spot, 'turning spot off')
+    #         spotDict[spot][0] = False
 
 
 ## GUI ##
@@ -65,7 +108,6 @@ def stopApp(tkroot):
     tkroot.destroy()
     tkroot.quit()
 
-
 def createUI():
     print('# creating UI #')
     running = True
@@ -83,21 +125,30 @@ def createUI():
     o2 = canvas.create_oval(x1, x1, y1, y1, fill=blue, activefill=red)
     o3 = canvas.create_oval(x2, x2, y2, y2, fill=blue, activefill=red)
 
+    #o3switch = False
+
     exit = tkinter.Button(text='exit', command=lambda :stopApp(root))
     exit_place = canvas.create_window(10, 10, window=exit)
 
+    counter = 0
     while running:
+        if counter > 100000:
+            updateList()
+            counter = -1
+
         root.update_idletasks()
         root.update()
-
+        counter += 1
 
 ## app Loop ##
 while True:
-    text = input('{null = update list \n | break = nuke app \n | start = start app}')
+    text = input(' | null = update list \n | break = nuke app \n | start = start app')
     if text == 'break':
         break
     elif text == 'start':
         createUI()
 
+    #createUI()
     updateList()
-    print(tempList)
+    print(tempDict)
+    print(spotDict)
