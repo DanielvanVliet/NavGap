@@ -46,7 +46,8 @@ def updateList():
                     spotDict[line[0][27:-1]][1] = rowdata
                     print(spot, 'set to true, breaking for-loop')
                     break
-                else:
+                elif line[0][27:-1] in spotDict:
+                    print('set to false')
                     spotDict[line[0][27:-1]][0] = False
 
 
