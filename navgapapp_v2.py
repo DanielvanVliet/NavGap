@@ -6,8 +6,8 @@ import tkinter
 
 #spotdict name : [connection, strength]
 spotDict = {
-    'RPI_AP2' : [False, 0]
-    #'Connectify-me' : [False, 0]
+    'RPI_AP2' : [False, 0],
+    'Connectify-me' : [False, 0]
 }
 nodeDict = {}
 
@@ -40,7 +40,7 @@ def updateList():
                 #print(essid)
                 if row % 2 == 1:
                     rowdata = signal
-                    print(rowdata)
+                    #print(rowdata)
                 if essid == spot:
                     print('{} set to true, breaking for loop'.format(essid))
                     spotDict[spot][0] = True
@@ -48,7 +48,7 @@ def updateList():
                     break
                 else:
                     spotDict[spot][0] = False
-                    print('{} set to false'.format(essid))
+                    #print('{} set to false'.format(essid))
 
 
     #for spot in spotDict:
@@ -64,19 +64,20 @@ coordB = [50, 70]
 coordC = [120, 200]
 ovalSize = 8
 
-def createOval(canvas, nodeName, x, y):
-    print('creating {} (node) on {} at {}, {}'.format(nodeName, canvas, x, y))
+def createOval(canvas, spotName, x, y):
+    print('creating {} (node) on {} at {}, {}'.format(spotName, canvas, x, y))
     nodeLoc = [
         [(x-ovalSize), (y-ovalSize)],
         [(x+ovalSize), (y+ovalSize)]
     ]
     create = canvas.create_oval(nodeLoc[0][0], nodeLoc[0][1], nodeLoc[1][0], nodeLoc[1][1], fill=blue, activefill=red)
-    global nodeDict
-    nodeDict[nodeName] = [create, x, y]
+    global spotDict
+    #nodeDict[nodeName] = [create, x, y]
+    spotDict[spotName].append([create, x, y])
 
 
-def changeNodeColor(canvas, node, color):
-    canvas.itemconfig(nodeDict[node][0], fill=color)
+def changeNodeColor(canvas, spotName, color):
+    canvas.itemconfig(spotDict[spotName][2][0], fill=color)
 
 def stopApp(tkroot):
     print('killing root')
@@ -89,9 +90,9 @@ def updateNodes(canvas):
         #print(each)
         #print(spotDict[each][0])
         if spotDict[each][0] == True:
-            changeNodeColor(canvas, 'nodeA', yellow)
+            changeNodeColor(canvas, each, yellow)
         else:
-            changeNodeColor(canvas, 'nodeA', blue)
+            changeNodeColor(canvas, each, blue)
 
 def createUI():
     print('# creating UI #')
@@ -101,7 +102,10 @@ def createUI():
     canvas = tkinter.Canvas(root, width=WIDTH, height=HEIGHT)
     canvas.pack()
 
-    createOval(canvas, 'nodeA', 20, 50)
+    locY = 50
+    for each in spotDict:
+        createOval(canvas, each, 20, locY)
+        locY += 50
 
     exit = tkinter.Button(text='exit', command=lambda :stopApp(root))
     exit_place = canvas.create_window(10, 10, window=exit)
@@ -109,7 +113,7 @@ def createUI():
     print(nodeDict)
     counter = 0
     while running:
-        if counter > 10000:
+        if counter > 5000:
             updateList()
             counter = -1
 
