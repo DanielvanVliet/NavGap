@@ -42,13 +42,12 @@ def createUI():
     canvas.grid()
     for each in nodeCoords:
         createOval(nodeCoords[each])
-        dictOvals['node'+each] = [canvas.create_oval(node[0][0], node[0][1], node[1][0], node[1][1], fill=blue, activefill=red, each.get()]
-        dictLines['lines'+each]
+        dictOvals['node'+each] = [canvas.create_oval(node[0][0], node[0][1], node[1][0], node[1][1], fill=blue, activefill=red), nodeCoords.get(each[0], nodeCoords.get(each[1]))]
+        #dictLines['line'+each] = canvas.create_line(coordB[0], coordB[1], coordA[0], coordA[1])
     lineAB = canvas.create_line(coordB[0], coordB[1], coordA[0], coordA[1])
     lineAC = canvas.create_line(coordC[0], coordC[1], coordA[0], coordA[1])
     LineCB = canvas.create_line(coordC[0], coordC[1], coordB[0], coordB[1])
-    print(dictOvals)
-    print(dictLines)
+
     """
     oAB = canvas.create_line(coordB[0], coordB[1], coordA[0], coordA[1])
     oCA = canvas.create_line(coordC[0], coordC[1], coordA[0], coordA[1])
