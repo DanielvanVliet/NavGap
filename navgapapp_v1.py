@@ -128,7 +128,6 @@ def createUI():
         root.update_idletasks()
         root.update()
 
-
 ## app Loop ##
 while True:
     text = input('{null = update list \n | break = nuke app \n | start = start app}')
