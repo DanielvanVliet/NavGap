@@ -1,8 +1,8 @@
 import time
 import tkinter
-
-coordA = [0, 30]
-coordB = [200, 270]
+#coords between (10,10) and (415, 295), otherwise it won't be drawn ON the canvas
+coordA = [230, 44]
+coordB = [145, 80]
 
 def createOval(coord):
     global node
@@ -12,15 +12,15 @@ def createOval(coord):
     counter = 0
     for each in coord:
         if counter == 0:
-            tempCoord[0] -= 20
+            tempCoord[0] -= 5
             node[0].append(tempCoord[0])
-            tempCoord[1] -= 20
+            tempCoord[1] -= 5
             node[0].append(tempCoord[1])
             counter += 1
         else:
-            tempCoord1[0] += 20
+            tempCoord1[0] += 5
             node[1].append(tempCoord1[0])
-            tempCoord1[1] += 20
+            tempCoord1[1] += 5
             node[1].append(tempCoord1[1])
 
 
