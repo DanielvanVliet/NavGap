@@ -4,10 +4,10 @@ import time
 import tkinter
 
 
-#spotdict name : [connection, strength]
+#spotdict name : [connection, strength, loc X, loc Y]
 spotDict = {
-    'RPI_AP2' : [False, 0],
-    'Connectify-me' : [False, 0]
+    'RPI_AP2' : [False, 0, 90, 180],
+    'Connectify-me' : [False, 0, 50, 70]
 }
 nodeDict = {}
 
@@ -16,6 +16,9 @@ essidList = []
 signalList = []
 tempDict = {}
 updateCmd = 'sudo bash /home/pi/github/NavGap/navgapboot.sh start'
+# look for a way to make this less heavy for the system by dropping the logging into .csv and recording directly into python
+# currently the Cmd to log and load is too heavy for the system
+# http://stackoverflow.com/questions/4760215/running-shell-command-from-python-and-capturing-the-output
 
 def updateList():
     global spotDict
@@ -25,7 +28,7 @@ def updateList():
     essidList = []
     signalList = []
     print('# update list #')
-    os.system(updateCmd)
+    #os.system(updateCmd)
 
     for spot in spotDict:
         print(' | Connection: {:15}: {}, strength: {}'.format(spot, spotDict[spot][0], spotDict[spot][1]))
@@ -41,7 +44,7 @@ def updateList():
                 if row % 2 == 1:
                     rowdata = signal
                     #print(rowdata)
-                if essid == spot:
+                if essid == spot and int(rowdata) <= -75: # -75 = range limiter
                     print('{} set to true, breaking for loop'.format(essid))
                     spotDict[spot][0] = True
                     spotDict[spot][1] = rowdata
@@ -50,21 +53,14 @@ def updateList():
                     spotDict[spot][0] = False
                     #print('{} set to false'.format(essid))
 
-
-    #for spot in spotDict:
-
 ## GUI ##
 blue = '#08088A'
 yellow = '#FFFF00'
 red = '#FF0000'
 running = False
 
-coordA = [90, 180]
-coordB = [50, 70]
-coordC = [120, 200]
-ovalSize = 8
-
 def createOval(canvas, spotName, x, y):
+    ovalSize = 8
     print('creating {} (node) on {} at {}, {}'.format(spotName, canvas, x, y))
     nodeLoc = [
         [(x-ovalSize), (y-ovalSize)],
@@ -77,7 +73,7 @@ def createOval(canvas, spotName, x, y):
 
 
 def changeNodeColor(canvas, spotName, color):
-    canvas.itemconfig(spotDict[spotName][2][0], fill=color)
+    canvas.itemconfig(spotDict[spotName][-1][0], fill=color)
 
 def stopApp(tkroot):
     print('killing root')
@@ -104,7 +100,8 @@ def createUI():
 
     locY = 50
     for each in spotDict:
-        createOval(canvas, each, 20, locY)
+        print(each)
+        createOval(canvas, each, spotDict[each][2], spotDict[each][3])
         locY += 50
 
     exit = tkinter.Button(text='exit', command=lambda :stopApp(root))
@@ -113,7 +110,7 @@ def createUI():
     print(nodeDict)
     counter = 0
     while running:
-        if counter > 5000:
+        if counter > 1000:
             updateList()
             counter = -1
 
