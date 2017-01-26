@@ -40,15 +40,15 @@ def updateList():
                     #print(rowdata)
                 elif spot == line[0][27:-1]:
                     print('####################')
-                    print('{} == {}'.format(line, spot))
+                    print('{} == {}'.format(line[0][27:-1], spot))
                     #print(line[0][27:-1])
                     spotDict[line[0][27:-1]][0] = True
                     spotDict[line[0][27:-1]][1] = rowdata
-                    print(spot, 'set to true, breaking for loop')
+                    print(spot, 'set to true, breaking for-loop')
                     break
-                elif line[0][27:-1] in spotDict:
-                     spotDict[line[0][27:-1]][0] = False
-                     print(spot, 'set to false')
+                elif spotDict[line[0][27:-1]][0] in spotDict:
+                    spotDict[line[0][27:-1]][0] = False
+                    print(spot, 'set to false')
 
 
         # for each in reader:
