@@ -57,9 +57,11 @@ def updateList():
 
     for spot in spotList:
         if spot in tempList:
+            print(spot, 'turning spot on')
             spotList[spot][0] = True
             spotList[spot][1] = tempList[spot]
         else:
+            print(spot, 'turning spot off')
             spotList[spot][0] = False
 
 
@@ -114,6 +116,14 @@ def createUI():
                 elif spotList[spot][0] == False:
                     print('turn o3 off')
                     changeNodeColor(canvas, o3, blue)
+            if spot == 'Connectify_me':
+                print(spotList[spot])
+                if spotList[spot][0] == True:
+                    print('turn o1 on')
+                    changeNodeColor(canvas, o1, yellow)
+                elif spotList[spot][0] == False:
+                    print('turn o1 off')
+                    changeNodeColor(canvas, o1, blue)
 
         root.update_idletasks()
         root.update()
