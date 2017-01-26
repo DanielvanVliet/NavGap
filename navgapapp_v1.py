@@ -129,7 +129,7 @@ def createOval(canvas, nodeName, x, y):
         [(x-ovalSize), (y-ovalSize)],
         [(x+ovalSize), (y+ovalSize)]
     ]
-    nodeDict[nodeName] = canvas.create_oval(nodeLoc[0][0], nodeLoc[0][1], nodeLoc[1][0], nodeLoc[1][1], fill=blue, activefill=red)
+    nodeDict[nodeName] = [canvas.create_oval(nodeLoc[0][0], nodeLoc[0][1], nodeLoc[1][0], nodeLoc[1][1], fill=blue, activefill=red), x, y]
 
 
 def changeNodeColor(canvas, node, color):
@@ -141,6 +141,10 @@ def stopApp(tkroot):
     running = False
     tkroot.destroy()
     tkroot.quit()
+
+def updateLoc():
+    for each in spotDict:
+        print()
 
 def createUI():
     print('# creating UI #')
@@ -160,7 +164,7 @@ def createUI():
     # o3 = canvas.create_oval(x2, x2, y2, y2, fill=blue, activefill=red)
     #o3switch = False
 
-    createOval2('node A', 20, 50, canvas)
+    createOval(canvas, 'nodeA', 20, 50)
 
     exit = tkinter.Button(text='exit', command=lambda :stopApp(root))
     exit_place = canvas.create_window(10, 10, window=exit)
