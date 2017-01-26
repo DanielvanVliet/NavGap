@@ -32,7 +32,7 @@ def updateList():
     essidList = []
     signalList = []
     print('# update list #')
-    #os.system(updateCmd)
+    os.system(updateCmd)
 
     for spot in spotDict:
         print(' | Connection: {:15}: {}, strength: {}'.format(spot, spotDict[spot][0], spotDict[spot][1]))
@@ -48,7 +48,7 @@ def updateList():
                 if row % 2 == 1:
                     rowdata = signal
                     #print(rowdata)
-                if essid == spot and int(rowdata) <= 75: # -75 = range limiter
+                if essid == spot and int(rowdata) <= 70: # -75 = range limiter
                     print('{} set to true, breaking for loop'.format(essid))
                     spotDict[spot][0] = True
                     spotDict[spot][1] = rowdata
