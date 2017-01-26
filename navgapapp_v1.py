@@ -15,6 +15,7 @@ tempList = {}
 updateCmd = 'sudo bash /home/pi/github/NavGap/navgapboot.sh start'
 
 def updateList():
+    global spotList
     global essidList
     global signalList
     global tempList
@@ -106,7 +107,7 @@ def createUI():
         updateList()
         for spot in spotList:
             if spot == 'RPI_AP2':
-                print(spot)
+                print(spotList[spot])
                 if spotList[spot][0] == True:
                     print('turn o3 on')
                     changeNodeColor(canvas, o3, yellow)
