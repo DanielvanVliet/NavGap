@@ -8,45 +8,58 @@ spotList = {
     'RPI_AP2' : [False, 0]
 }
 
-## update essidlist ##
-EssidList = []
-SignalList = []
+## update essidList ##
+essidList = []
+signalList = []
 tempList = {}
 updateCmd = 'sudo bash /home/pi/github/NavGap/navgapboot.sh start'
 
 def updateList():
-    global EssidList
-    global SignalList
+    global essidList
+    global signalList
     global tempList
-    EssidList = []
-    SignalList = []
+    essidList = []
+    signalList = []
     print('# update list #')
     os.system(updateCmd)
     with open('log.csv', 'r') as file:
         reader = csv.reader(file)
         row = 0
         for each in reader:
+            #print(each)
             row += 1
             if row % 2 == 1:
-                SignalList.append(each[0][48:51])
+                #signalList.append(each[0][48:51])
+                rowdata = each[0][48:51]
+                #print(rowdata)
             else:
-                EssidList.append(each[0][27:-1])
+                #essidList.append(each[0][27:-1])
+                tempList[each[0][27:-1]] = rowdata
 
-    # for essid in SignalList:
+    # for essid in signalList:
     #     tempList.append([essid])
     # counter = 0
-    # for signal in EssidList:
+    # for signal in essidList:
     #     tempList[counter].append(signal)
     #     counter +=1
 
     counter = 0
 
-    for essid in EssidList:
-        #print('{} in EssidList'.format(essid))
-        if essid in spotList:
-            #print('{} in spotList'.format(essid))
-            tempList[essid] = SignalList[counter]
-        counter += 1
+    # for essid in essidList:
+    #     #print('{} in essidList'.format(essid))
+    #     if essid in spotList:
+    #         #print('{} in spotList'.format(essid))
+    #         #tempList[essid] = signalList[counter]
+    #         spotList[essid] = [True, signalList[counter]]
+    #         #spotList[essid][0] = False
+    #     counter += 1
+
+    for spot in spotList:
+        if spot in tempList:
+            spotList[spot][0] = True
+            spotList[spot][1] = tempList[spot]
+        else:
+            spotList[spot][0] = False
 
 
 ## GUI ##
@@ -83,10 +96,22 @@ def createUI():
     o2 = canvas.create_oval(x1, x1, y1, y1, fill=blue, activefill=red)
     o3 = canvas.create_oval(x2, x2, y2, y2, fill=blue, activefill=red)
 
+    #o3switch = False
+
     exit = tkinter.Button(text='exit', command=lambda :stopApp(root))
     exit_place = canvas.create_window(10, 10, window=exit)
 
     while running:
+        for spot in spotList:
+            if spot == 'RPI_AP2':
+                print(spot)
+                if spotList[spot][0] == True:
+                    print('turn o3 on')
+                    changeNodeColor(canvas, o3, yellow)
+                elif spotList[spot][0] == False:
+                    print('turn o3 off')
+                    changeNodeColor(canvas, o3, blue)
+
         root.update_idletasks()
         root.update()
 
@@ -101,3 +126,4 @@ while True:
 
     updateList()
     print(tempList)
+    print(spotList)
