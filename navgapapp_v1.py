@@ -4,7 +4,6 @@ import time
 import tkinter
 
 spotDict = {
-    'Connectify-me' : [False, 0],
     'RPI_AP2' : [False, 0]
 }
 nodeDict = {}
@@ -34,12 +33,12 @@ def updateList():
             for line in reader:
                 #print(line)
                 row += 1
-                print(spot)
-                print(line[0][27:-1])
+                #print(spot)
+                #print(line[0][27:-1])
                 if row % 2 == 1:
                     rowdata = line[0][48:51]
                     #print(rowdata)
-                elif str(spot) == line[0][27:-1]:
+                elif spot == line[0][27:-1]:
                     print('####################')
                     print('{} == {}'.format(line, spot))
                     #print(line[0][27:-1])
@@ -125,17 +124,17 @@ ovalSize = 8
 
 def createOval(canvas, nodeName, x, y):
     print('creating {} (node) on {} at {}, {}'.format(nodeName, canvas, x, y))
-    create = canvas.create_oval(nodeLoc[0][0], nodeLoc[0][1], nodeLoc[1][0], nodeLoc[1][1], fill=blue, activefill=red)
-    global nodeDict
     nodeLoc = [
         [(x-ovalSize), (y-ovalSize)],
         [(x+ovalSize), (y+ovalSize)]
     ]
+    create = canvas.create_oval(nodeLoc[0][0], nodeLoc[0][1], nodeLoc[1][0], nodeLoc[1][1], fill=blue, activefill=red)
+    global nodeDict
     nodeDict[nodeName] = [create, x, y]
 
 
 def changeNodeColor(canvas, node, color):
-    print('{} node changed color: {}'.format(node, color))
+    #print('{} node changed color: {}'.format(node, color))
     #canvas.itemconfig(node, fill=color)
     canvas.itemconfig(nodeDict[node][0], fill=color)
 
@@ -151,6 +150,8 @@ def updateNodes(canvas):
         #print(spotDict[each][0])
         if spotDict[each][0] == True:
             changeNodeColor(canvas, 'nodeA', yellow)
+        else:
+            changeNodeColor(canvas, 'nodeA', blue)
 
 def createUI():
     print('# creating UI #')
@@ -189,7 +190,7 @@ def createUI():
 
 ## app Loop ##
 while True:
-    text = input(' | null = update list \n | break = nuke app \n | start = start app')
+    text = input(' | null = update list \n | break = nuke app \n | start = start app \n ')
     if text == 'break':
         break
     elif text == 'start':
