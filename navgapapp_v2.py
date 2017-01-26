@@ -2,7 +2,8 @@ import csv
 import os
 import time
 import tkinter
-
+import subprocess
+#import commands
 
 #spotdict name : [connection, strength, loc X, loc Y]
 spotDict = {
@@ -20,9 +21,11 @@ connectDict = {
     'tempMichelLoc' : 'Connectify-me'
 }
 
-
+## updateCMD ##
+#updateCmd = 'sudo bash /home/pi/github/NavGap/navgapboot.sh start'
+updateCmd = 'sudo iwlist wlan0 scan |grep -e Signal -e ESSID'
+#updateCmd = ['sudo','iwlist','wlan0','scan','|grep','-e Signal','-e ESSID']
 ## update essidList ##
-updateCmd = 'sudo bash /home/pi/github/NavGap/navgapboot.sh start'
 # look for a way to make this less heavy for the system by dropping the logging into .csv and recording directly into python
 # currently the Cmd to log and load is too heavy for the system
 # http://stackoverflow.com/questions/4760215/running-shell-command-from-python-and-capturing-the-output
@@ -32,7 +35,11 @@ def updateList():
     essidList = []
     signalList = []
     print('# update list #')
-    os.system(updateCmd)
+    #os.system(updateCmd)
+
+    result = subprocess.getoutput(updateCmd)
+    for line in result.split('\n'):
+        print(line)
 
     for spot in spotDict:
         print(' | Connection: {:15}: {}, strength: {}'.format(spot, spotDict[spot][0], spotDict[spot][1]))
@@ -140,5 +147,9 @@ while True:
         #createUI()
 
     updateList()
-    createUI()
-    print(spotDict)
+    #createUI()
+    #output = subprocess.check_output(updateCmd, shell=True)
+    #print(output)
+    #print(commands.getstatusoutput('updateCmd')
+    #print(commands.getstatusoutput(updateCmd))
+    #print(spotDict)
