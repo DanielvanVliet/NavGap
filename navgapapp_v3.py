@@ -5,7 +5,7 @@ import tkinter
 import subprocess
 #import commands
 
-#spotdict name : [connection, strength, loc X, loc Y]
+#spotdict name : [connection, strength, loc X, loc Y], node gets appended behind it once the script starts
 spotDict = {
     'RPI_AP2' : [False, 0, 50, 50],
     'Connectify-me' : [False, 0, 180, 70],
@@ -13,36 +13,24 @@ spotDict = {
     'NogEenTest' : [False, 0, 230, 250]
 }
 
-# connectDict = {
-#     'RPI_AP2' : 'Connectify-me',
-#     'RPI_AP2' : 'tempMichelLoc',
-#     'Connectify-me' : 'NogEenTest',
-#     'tempMichelLoc' : 'NogEenTest',
-#     'tempMichelLoc' : 'Connectify-me'
-# }
-
 connectDict = {
     'RPI_AP2' : ['Connectify-me', 'tempMichelLoc'],
     'Connectify-me' : ['NogEenTest'],
     'tempMichelLoc' : ['NogEenTest', 'Connectify-me']
 }
 
-## updateCMD ##
-#updateCmd = 'sudo bash /home/pi/github/NavGap/navgapboot.sh start'
-updateCmd = 'sudo iwlist wlan0 scan |grep -e Signal -e ESSID'
-#updateCmd = ['sudo','iwlist','wlan0','scan','|grep','-e Signal','-e ESSID']
-## update essidList ##
-# look for a way to make this less heavy for the system by dropping the logging into .csv and recording directly into python
-# currently the Cmd to log and load is too heavy for the system
-# http://stackoverflow.com/questions/4760215/running-shell-command-from-python-and-capturing-the-output
 
+## updates the list of connections ##
 def updateList():
     global spotDict
     essidList = []
     signalList = []
     print('# update list #')
+    updateCmd = 'sudo iwlist wlan0 scan |grep -e Signal -e ESSID'
+    #updateCmd = 'sudo bash /home/pi/github/NavGap/navgapboot.sh start'
     #os.system(updateCmd)
 
+    ## use this when testing on pi
     # result = subprocess.getoutput(updateCmd)
     # for spot in spotDict:
     #     row = 0
@@ -66,6 +54,7 @@ def updateList():
     #             spotDict[spot][0] = False
     #             #print('{} set to false'.format(essid))
 
+    ## this is for pc testing, rips info from old log
     for spot in spotDict:
         print(' | Connection: {:15}: {}, strength: {}'.format(spot, spotDict[spot][0], spotDict[spot][1]))
         with open('log.csv', 'r') as file:
@@ -80,8 +69,8 @@ def updateList():
                 if row % 2 == 1:
                     rowdata = signal
                     #print(rowdata)
-                if essid == spot and int(rowdata) <= 70: # -75 = range limiter
-                    print('{} set to true, breaking for loop'.format(essid))
+                if essid == spot and int(rowdata) <= 70: # range limiter
+                    print('{} set to true, breaking for-loop'.format(essid))
                     spotDict[spot][0] = True
                     spotDict[spot][1] = rowdata
                     break
@@ -108,11 +97,42 @@ def createOval(canvas, spotName, x, y):
     #nodeDict[nodeName] = [create, x, y]
     spotDict[spotName].append([create, x, y])
 
+def createOvalSolo(canvas, x, y):
+    ovalSize = 4
+    print('creating (solo node) at {}, {}'.format(x, y))
+    nodeLoc = [
+        [(x-ovalSize), (y-ovalSize)],
+        [(x+ovalSize), (y+ovalSize)]
+    ]
+    canvas.create_oval(nodeLoc[0][0], nodeLoc[0][1], nodeLoc[1][0], nodeLoc[1][1], fill=blue, activefill=red)
+
 def createConnection(canvas, point1, point2):
     # (x1, y1, x2, y2)
-    print('creating connection between {} at x{},y{}and {} at x{},y{}'.format(point1,spotDict[point1][2], spotDict[point1][3],
-                                                                               point2,spotDict[point2][2], spotDict[point2][3]))
+    print('creating connection between {} at x{},y{} and {} at x{},y{}'.format(point1,
+                                                                               spotDict[point1][2], spotDict[point1][3],
+                                                                               point2,
+                                                                               spotDict[point2][2], spotDict[point2][3]))
     canvas.create_line(spotDict[point1][2], spotDict[point1][3], spotDict[point2][2], spotDict[point2][3])
+
+    xPoint1 = spotDict[point1][2]
+    yPoint1 = spotDict[point1][3]
+    xPoint2 = spotDict[point2][2]
+    yPoint2 = spotDict[point2][3]
+
+    if xPoint1 >= xPoint2:
+        sumDif = xPoint1 - xPoint2
+        ovalX = xPoint1 - sumDif/2
+    else:
+        sumDif = xPoint2 - xPoint1
+        ovalX = xPoint2 - sumDif/2
+
+    if yPoint1 >= yPoint2:
+        sumDif = yPoint1 - yPoint2
+        ovalY = yPoint1 - sumDif/2
+    else:
+        sumDif = yPoint2 - yPoint1
+        ovalY = yPoint2 - sumDif/2
+    createOvalSolo(canvas, ovalX, ovalY)
 
 def changeNodeColor(canvas, spotName, color):
     canvas.itemconfig(spotDict[spotName][-1][0], fill=color)
