@@ -7,14 +7,21 @@ import tkinter
 #spotdict name : [connection, strength, loc X, loc Y]
 spotDict = {
     'RPI_AP2' : [False, 0, 90, 180],
-    'Connectify-me' : [False, 0, 50, 70]
+    'Connectify-me' : [False, 0, 50, 70],
+    'tempMichelLoc' : [False, 0, 220, 50],
+    'NogEenTest' : [False, 0, 230, 250]
 }
-nodeDict = {}
+
+connectDict = {
+    'RPI_AP2' : 'Connectify-me',
+    'RPI_AP2' : 'tempMichelLoc',
+    'Connectify-me' : 'NogEenTest',
+    'tempMichelLoc' : 'NogEenTest',
+    'tempMichelLoc' : 'Connectify-me'
+}
+
 
 ## update essidList ##
-essidList = []
-signalList = []
-tempDict = {}
 updateCmd = 'sudo bash /home/pi/github/NavGap/navgapboot.sh start'
 # look for a way to make this less heavy for the system by dropping the logging into .csv and recording directly into python
 # currently the Cmd to log and load is too heavy for the system
@@ -22,9 +29,6 @@ updateCmd = 'sudo bash /home/pi/github/NavGap/navgapboot.sh start'
 
 def updateList():
     global spotDict
-    global essidList
-    global signalList
-    global tempDict
     essidList = []
     signalList = []
     print('# update list #')
@@ -53,6 +57,7 @@ def updateList():
                     spotDict[spot][0] = False
                     #print('{} set to false'.format(essid))
 
+
 ## GUI ##
 blue = '#08088A'
 yellow = '#FFFF00'
@@ -71,6 +76,9 @@ def createOval(canvas, spotName, x, y):
     #nodeDict[nodeName] = [create, x, y]
     spotDict[spotName].append([create, x, y])
 
+def createConnection(canvas, point1, point2):
+    # (x1, y1, x2, y2)
+    canvas.create_line(spotDict[point1][2], spotDict[point1][3], spotDict[point2][2], spotDict[point2][3])
 
 def changeNodeColor(canvas, spotName, color):
     canvas.itemconfig(spotDict[spotName][-1][0], fill=color)
@@ -98,16 +106,19 @@ def createUI():
     canvas = tkinter.Canvas(root, width=WIDTH, height=HEIGHT)
     canvas.pack()
 
-    locY = 50
+    root.overrideredirect(True)
+    root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
+
+    for con in connectDict:
+        createConnection(canvas, con, connectDict[con])
+
     for each in spotDict:
         print(each)
         createOval(canvas, each, spotDict[each][2], spotDict[each][3])
-        locY += 50
 
     exit = tkinter.Button(text='exit', command=lambda :stopApp(root))
-    exit_place = canvas.create_window(10, 10, window=exit)
+    exit_place = canvas.create_window(20, 30, window=exit)
 
-    print(nodeDict)
     counter = 0
     while running:
         if counter > 1000:
@@ -119,6 +130,7 @@ def createUI():
         root.update()
         counter += 1
 
+
 ## app boot loop ##
 while True:
     # text = input(' | null = update list \n | break = nuke app \n | start = start app \n ')
@@ -129,5 +141,4 @@ while True:
 
     updateList()
     createUI()
-    print(tempDict)
     print(spotDict)
