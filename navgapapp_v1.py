@@ -46,9 +46,11 @@ def updateList():
                     spotDict[line[0][27:-1]][1] = rowdata
                     print(spot, 'set to true, breaking for-loop')
                     break
-                elif spotDict[line[0][27:-1]][0] in spotDict:
+                elif line[0][27:-1] in spotDict:
                     spotDict[line[0][27:-1]][0] = False
                     print(spot, 'set to false')
+                else:
+                    print('nothing')
 
 
         # for each in reader:
