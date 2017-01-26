@@ -102,6 +102,8 @@ def createUI():
     exit_place = canvas.create_window(10, 10, window=exit)
 
     while running:
+        time.sleep(1)
+        updateList()
         for spot in spotList:
             if spot == 'RPI_AP2':
                 print(spot)
