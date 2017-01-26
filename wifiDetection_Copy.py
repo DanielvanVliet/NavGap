@@ -40,8 +40,8 @@ def updateList():
     print(tempList)
 
 while True:
-    input = input(':')
-    if input == 'break':
+    text = input('{null | break}')
+    if text == 'break':
         break
 
     updateList()
