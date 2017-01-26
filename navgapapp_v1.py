@@ -7,6 +7,7 @@ spotDict = {
     'Connectify-me' : [False, 0],
     'RPI_AP2' : [False, 0]
 }
+nodeDict = {}
 
 ## update essidList ##
 essidList = []
@@ -98,6 +99,39 @@ yellow = '#FFFF00'
 red = '#FF0000'
 running = False
 
+coordA = [90, 180]
+coordB = [50, 70]
+coordC = [120, 200]
+ovalSize = 8
+
+# def createOval(coord):
+#     global node
+#     tempCoord = coord.copy()
+#     tempCoord1 = coord.copy()
+#     node = [[], []]
+#     counter = 0
+#     for each in coord:
+#         if counter == 0:
+#             tempCoord[0] -= ovalSize
+#             node[0].append(tempCoord[0])
+#             tempCoord[1] -= ovalSize
+#             node[0].append(tempCoord[1])
+#             counter += 1
+#         else:
+#             tempCoord1[0] += ovalSize
+#             node[1].append(tempCoord1[0])
+#             tempCoord1[1] += ovalSize
+#             node[1].append(tempCoord1[1])
+
+def createOval(canvas, nodeName, x, y):
+    global nodeDict
+    nodeLoc = [
+        [(x-ovalSize), (y-ovalSize)],
+        [(x+ovalSize), (y+ovalSize)]
+    ]
+    nodeDict[nodeName] = canvas.create_oval(nodeLoc[0][0], nodeLoc[0][1], nodeLoc[1][0], nodeLoc[1][1], fill=blue, activefill=red)
+
+
 def changeNodeColor(canvas, node, color):
     print('{} node changed color: {}'.format(node, color))
     canvas.itemconfig(node, fill=color)
@@ -117,15 +151,16 @@ def createUI():
     canvas.pack()
 
     # drawing test ovals
-    x0, y0 = 10, 50
-    x1, y1 = 50, 90
-    x2, y2 = 90, 130
-
-    o1 = canvas.create_oval(x0, x0, y0, y0, fill=blue, activefill=red)
-    o2 = canvas.create_oval(x1, x1, y1, y1, fill=blue, activefill=red)
-    o3 = canvas.create_oval(x2, x2, y2, y2, fill=blue, activefill=red)
-
+    # x0, y0 = 10, 50
+    # x1, y1 = 50, 90
+    # x2, y2 = 90, 130
+    #
+    # o1 = canvas.create_oval(x0, x0, y0, y0, fill=blue, activefill=red)
+    # o2 = canvas.create_oval(x1, x1, y1, y1, fill=blue, activefill=red)
+    # o3 = canvas.create_oval(x2, x2, y2, y2, fill=blue, activefill=red)
     #o3switch = False
+
+    createOval2('node A', 20, 50, canvas)
 
     exit = tkinter.Button(text='exit', command=lambda :stopApp(root))
     exit_place = canvas.create_window(10, 10, window=exit)
