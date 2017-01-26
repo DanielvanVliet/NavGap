@@ -124,17 +124,20 @@ ovalSize = 8
 #             node[1].append(tempCoord1[1])
 
 def createOval(canvas, nodeName, x, y):
+    print('creating {} (node) on {} at {}, {}'.format(nodeName, canvas, x, y))
+    create = canvas.create_oval(nodeLoc[0][0], nodeLoc[0][1], nodeLoc[1][0], nodeLoc[1][1], fill=blue, activefill=red)
     global nodeDict
     nodeLoc = [
         [(x-ovalSize), (y-ovalSize)],
         [(x+ovalSize), (y+ovalSize)]
     ]
-    nodeDict[nodeName] = [canvas.create_oval(nodeLoc[0][0], nodeLoc[0][1], nodeLoc[1][0], nodeLoc[1][1], fill=blue, activefill=red), x, y]
+    nodeDict[nodeName] = [create, x, y]
 
 
 def changeNodeColor(canvas, node, color):
     print('{} node changed color: {}'.format(node, color))
-    canvas.itemconfig(node, fill=color)
+    #canvas.itemconfig(node, fill=color)
+    canvas.itemconfig(nodeDict[node][0], fill=color)
 
 def stopApp(tkroot):
     print('killing root')
@@ -142,9 +145,12 @@ def stopApp(tkroot):
     tkroot.destroy()
     tkroot.quit()
 
-def updateLoc():
+def updateNodes(canvas):
     for each in spotDict:
-        print()
+        #print(each)
+        #print(spotDict[each][0])
+        if spotDict[each][0] == True:
+            changeNodeColor(canvas, 'nodeA', yellow)
 
 def createUI():
     print('# creating UI #')
@@ -170,11 +176,13 @@ def createUI():
     exit_place = canvas.create_window(10, 10, window=exit)
 
     counter = 0
+    print(nodeDict)
     while running:
         if counter > 100000:
             updateList()
             counter = -1
 
+        updateNodes(canvas)
         root.update_idletasks()
         root.update()
         counter += 1
