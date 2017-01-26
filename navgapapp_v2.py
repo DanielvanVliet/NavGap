@@ -42,13 +42,13 @@ def updateList():
             for line in reader:
                 row += 1
                 essid = line[0][27:-1]
-                signal = line[0][48:51]
+                signal = line[0][49:51]
                 #print(spot)
                 #print(essid)
                 if row % 2 == 1:
                     rowdata = signal
                     #print(rowdata)
-                if essid == spot and int(rowdata) <= -75: # -75 = range limiter
+                if essid == spot and int(rowdata) <= 75: # -75 = range limiter
                     print('{} set to true, breaking for loop'.format(essid))
                     spotDict[spot][0] = True
                     spotDict[spot][1] = rowdata
