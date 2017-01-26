@@ -156,7 +156,7 @@ def createUI():
 
 ## app boot loop ##
 while True:
-    # text = input(' | null = update list \n | break = nuke app \n | start = start app \n ')
+    text = input(' | null = update list \n | break = nuke app \n | start = start app \n ')
     # if text == 'break':
     #     break
     # elif text == 'start':
