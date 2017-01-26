@@ -44,8 +44,7 @@ def updateList():
             row += 1
             essid = line[0][27:-1]
             signal = line[0][49:51]
-            #print(spot)
-            #print(essid)
+            print(line)
             if row % 2 == 1:
                 rowdata = signal
                 #print(rowdata)
