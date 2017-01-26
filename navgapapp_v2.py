@@ -38,31 +38,48 @@ def updateList():
     #os.system(updateCmd)
 
     result = subprocess.getoutput(updateCmd)
-    for line in result.split('\n'):
-        print(line)
-
     for spot in spotDict:
-        print(' | Connection: {:15}: {}, strength: {}'.format(spot, spotDict[spot][0], spotDict[spot][1]))
-        with open('log.csv', 'r') as file:
-            reader = csv.reader(file)
-            row = 0
-            for line in reader:
-                row += 1
-                essid = line[0][27:-1]
-                signal = line[0][49:51]
-                #print(spot)
-                #print(essid)
-                if row % 2 == 1:
-                    rowdata = signal
-                    #print(rowdata)
-                if essid == spot and int(rowdata) <= 70: # -75 = range limiter
-                    print('{} set to true, breaking for loop'.format(essid))
-                    spotDict[spot][0] = True
-                    spotDict[spot][1] = rowdata
-                    break
-                else:
-                    spotDict[spot][0] = False
-                    #print('{} set to false'.format(essid))
+        row = 0
+        for line in result.split('\n'):
+            row += 1
+            essid = line[0][27:-1]
+            signal = line[0][49:51]
+            #print(spot)
+            #print(essid)
+            if row % 2 == 1:
+                rowdata = signal
+                #print(rowdata)
+            if essid == spot and int(rowdata) <= 70: # -75 = range limiter
+                print('{} set to true, breaking for loop'.format(essid))
+                spotDict[spot][0] = True
+                spotDict[spot][1] = rowdata
+                break
+            else:
+                spotDict[spot][0] = False
+                #print('{} set to false'.format(essid))
+
+    # for spot in spotDict:
+    #     print(' | Connection: {:15}: {}, strength: {}'.format(spot, spotDict[spot][0], spotDict[spot][1]))
+    #     with open('log.csv', 'r') as file:
+    #         reader = csv.reader(file)
+    #         row = 0
+    #         for line in reader:
+    #             row += 1
+    #             essid = line[0][27:-1]
+    #             signal = line[0][49:51]
+    #             #print(spot)
+    #             #print(essid)
+    #             if row % 2 == 1:
+    #                 rowdata = signal
+    #                 #print(rowdata)
+    #             if essid == spot and int(rowdata) <= 70: # -75 = range limiter
+    #                 print('{} set to true, breaking for loop'.format(essid))
+    #                 spotDict[spot][0] = True
+    #                 spotDict[spot][1] = rowdata
+    #                 break
+    #             else:
+    #                 spotDict[spot][0] = False
+    #                 #print('{} set to false'.format(essid))
 
 
 ## GUI ##
