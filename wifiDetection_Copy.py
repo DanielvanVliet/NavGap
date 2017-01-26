@@ -11,7 +11,7 @@ spotList = {
 
 EssidList = []
 SignalList = []
-tempList = []
+tempList = {}
 
 updateCmd = 'sudo bash /home/pi/github/NavGap/navgapboot.sh start'
 
@@ -19,6 +19,8 @@ def updateList():
     global EssidList
     global SignalList
     global tempList
+    EssidList = []
+    SignalList = []
     print('# update list #')
     os.system(updateCmd)
     with open('log.csv', 'r') as file:
@@ -27,17 +29,25 @@ def updateList():
         for each in reader:
             row += 1
             if row % 2 == 1:
-                EssidList.append(each[0][48:51])
+                SignalList.append(each[0][48:51])
             else:
-                SignalList.append(each[0][27:-1])
+                EssidList.append(each[0][27:-1])
 
-    for essid in SignalList:
-        tempList.append([essid])
+    # for essid in SignalList:
+    #     tempList.append([essid])
+    # counter = 0
+    # for signal in EssidList:
+    #     tempList[counter].append(signal)
+    #     counter +=1
+
     counter = 0
-    for signal in EssidList:
-        tempList[counter].append(signal)
-        counter +=1
-    print(tempList)
+
+    for essid in EssidList:
+        print('{} in EssidList'.format(essid))
+        if essid in spotList:
+            print('{} in spotList'.format(essid))
+            tempList[essid] = SignalList[counter]
+        counter += 1
 
 while True:
     text = input('{null | break}')
@@ -45,3 +55,4 @@ while True:
         break
 
     updateList()
+    print(tempList)
