@@ -40,5 +40,8 @@ def updateList():
     print(tempList)
 
 while True:
-    input()
+    input = input(':')
+    if input == 'break':
+        break
+
     updateList()
