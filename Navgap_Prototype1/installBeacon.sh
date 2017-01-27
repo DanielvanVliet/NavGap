@@ -1,4 +1,4 @@
-﻿#! /bin/bash
+#! /bin/bash
 # This script will ask the user the name of the wireless interface, Hotspot SSID and the corresponding pass$
 
 #echo "Type the name of your wireless interface and press [ENTER]"
