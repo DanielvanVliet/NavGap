@@ -35,7 +35,6 @@ def updateList():
     ## use this when testing on pi
     result = subprocess.getoutput(updateCmd)
     if len(result) > 0:
-        userList = []
         for spot in spotDict:
             row = 0
             for line in result.split('\n'):
@@ -58,6 +57,7 @@ def updateList():
                         print('{} set to false, last str: {}'.format(essid, rowdata))
                     spotDict[spot][0] = False
                     #print('{} set to false'.format(essid))
+    print('user inbetween: {}'.format(userList))
 
     ## this is for pc testing, rips info from old log
     # if os.name == 'nt':
@@ -84,8 +84,6 @@ def updateList():
     #                 else:
     #                     spotDict[spot][0] = False
     #                     #print('{} set to false'.format(essid))
-
-    print('user inbetween: {}'.format(userList))
 
 
 
