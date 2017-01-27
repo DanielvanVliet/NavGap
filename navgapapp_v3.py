@@ -165,6 +165,7 @@ def updateUser(canvas, user, points):
     #print(xCoords[-1])
     #print(yCoords[-1])
 
+
     ovalSize = 4
     nodeLoc = [
         [(xCoords[-1])-ovalSize, (yCoords[-1])-ovalSize],
@@ -227,8 +228,8 @@ def createUI():
         if counter > 500:
             updateList()
             counter = -1
-
-        updateUser(canvas,user, userList)
+            updateUser(canvas,user, userList)
+            
         updateNodes(canvas)
         root.update_idletasks()
         root.update()
