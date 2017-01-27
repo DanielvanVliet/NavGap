@@ -10,7 +10,9 @@ spotDict = {
     'RPI_AP2' : [False, 0, 50, 50],
     'Connectify-me' : [False, 0, 180, 70],
     'tempMichelLoc' : [False, 0, 220, 50],
-    'NogEenTest' : [False, 0, 230, 250]
+    'NogEenTest' : [False, 0, 230, 250],
+    'RPI_AP1' : [False, 0, 50, 150],
+    'RPI_AP3' : [False, 0, 50 , 250]
 }
 
 connectDict = {
@@ -31,53 +33,55 @@ def updateList():
 
     trueCount = 0
     ## use this when testing on pi
-    result = subprocess.getoutput(updateCmd)
-    for spot in spotDict:
-        row = 0
-        for line in result.split('\n'):
-            row += 1
-            essid = line[27:-1]
-            signal = line[49:51]
-            #print(essid)
-            #print(signal)
-            if row % 2 == 1:
-                rowdata = signal
-                #print(rowdata)
-            if essid == spot and int(rowdata) <= 70: # -75 = range limiter
-                print('{} set to true, breaking for loop, current str: {}'.format(essid, rowdata))
-                spotDict[spot][0] = True
-                spotDict[spot][1] = rowdata
-                break
-            else:
-                if spotDict[spot][0] == True and essid == spot:
-                    print('{} set to false, last str: {}'.format(essid, rowdata))
-                spotDict[spot][0] = False
-                #print('{} set to false'.format(essid))
+    if os.name == 'pusix':
+        result = subprocess.getoutput(updateCmd)
+        for spot in spotDict:
+            row = 0
+            for line in result.split('\n'):
+                row += 1
+                essid = line[27:-1]
+                signal = line[49:51]
+                #print(essid)
+                #print(signal)
+                if row % 2 == 1:
+                    rowdata = signal
+                    #print(rowdata)
+                if essid == spot and int(rowdata) <= 70: # -75 = range limiter
+                    print('{} set to true, breaking for loop, current str: {}'.format(essid, rowdata))
+                    spotDict[spot][0] = True
+                    spotDict[spot][1] = rowdata
+                    break
+                else:
+                    if spotDict[spot][0] == True and essid == spot:
+                        print('{} set to false, last str: {}'.format(essid, rowdata))
+                    spotDict[spot][0] = False
+                    #print('{} set to false'.format(essid))
 
     ## this is for pc testing, rips info from old log
-    # for spot in spotDict:
-    #     print(' | Connection: {:15}: {}, strength: {}'.format(spot, spotDict[spot][0], spotDict[spot][1]))
-    #     with open('log.csv', 'r') as file:
-    #         reader = csv.reader(file)
-    #         row = 0
-    #         for line in reader:
-    #             row += 1
-    #             essid = line[0][27:-1]
-    #             signal = line[0][49:51]
-    #             #print(spot)
-    #             #print(essid)
-    #             if row % 2 == 1:
-    #                 rowdata = signal
-    #                 #print(rowdata)
-    #             if essid == spot and int(rowdata) <= 70: # range limiter
-    #                 print('{} set to true, breaking for-loop'.format(essid))
-    #                 spotDict[spot][0] = True
-    #                 spotDict[spot][1] = rowdata
-    #                 userList.append(essid)
-    #                 break
-    #             else:
-    #                 spotDict[spot][0] = False
-    #                 #print('{} set to false'.format(essid))
+    if os.name == 'nt':
+        for spot in spotDict:
+            print(' | Connection: {:15}: {}, strength: {}'.format(spot, spotDict[spot][0], spotDict[spot][1]))
+            with open('log.csv', 'r') as file:
+                reader = csv.reader(file)
+                row = 0
+                for line in reader:
+                    row += 1
+                    essid = line[0][27:-1]
+                    signal = line[0][49:51]
+                    #print(spot)
+                    #print(essid)
+                    if row % 2 == 1:
+                        rowdata = signal
+                        #print(rowdata)
+                    if essid == spot and int(rowdata) <= 70: # range limiter
+                        print('{} set to true, breaking for-loop'.format(essid))
+                        spotDict[spot][0] = True
+                        spotDict[spot][1] = rowdata
+                        userList.append(essid)
+                        break
+                    else:
+                        spotDict[spot][0] = False
+                        #print('{} set to false'.format(essid))
 
     print('user inbetween: {}'.format(userList))
 
@@ -120,26 +124,6 @@ def createConnection(canvas, point1, point2):
                                                                                spotDict[point2][2], spotDict[point2][3]))
     canvas.create_line(spotDict[point1][2], spotDict[point1][3], spotDict[point2][2], spotDict[point2][3])
 
-    # xPoint1 = spotDict[point1][2]
-    # yPoint1 = spotDict[point1][3]
-    # xPoint2 = spotDict[point2][2]
-    # yPoint2 = spotDict[point2][3]
-    #
-    # if xPoint1 >= xPoint2:
-    #     sumDif = xPoint1 - xPoint2
-    #     ovalX = xPoint1 - sumDif/2
-    # else:
-    #     sumDif = xPoint2 - xPoint1
-    #     ovalX = xPoint2 - sumDif/2
-    #
-    # if yPoint1 >= yPoint2:
-    #     sumDif = yPoint1 - yPoint2
-    #     ovalY = yPoint1 - sumDif/2
-    # else:
-    #     sumDif = yPoint2 - yPoint1
-    #     ovalY = yPoint2 - sumDif/2
-    # createOvalSolo(canvas, ovalX, ovalY)
-
 #triangulation (pseudo)
 def updateUser(canvas, user, points):
     xCoords = []
@@ -153,7 +137,7 @@ def updateUser(canvas, user, points):
 
     sumDif = 0
     counter = 0
-    for each in xCoords[0:-1]:
+    for each in xCoords[0:-2]:
         if xCoords[counter] > xCoords[counter+1]:
             sumDif = xCoords[counter] - xCoords[counter+1]
             xCoords[counter+1] = xCoords[counter] - sumDif /2
@@ -165,7 +149,7 @@ def updateUser(canvas, user, points):
 
     sumDif = 0
     counter = 0
-    for each in yCoords[0:-1]:
+    for each in yCoords[0:-2]:
         if yCoords[counter] > yCoords[counter+1]:
             sumDif = yCoords[counter] - yCoords[counter+1]
             yCoords[counter+1] = yCoords[counter] - sumDif /2
@@ -249,7 +233,7 @@ def createUI():
 
 ## app boot loop ##
 while True:
-    print('running on {}'.format(os.name)) # windows = nt, kijken wat rpi is!
+    print('running on {}'.format(os.name)) # windows = nt, rpi = posix
     updateList()
     print(spotDict)
     text = input(' | null = update list \n | break = nuke app \n | start = start app \n >')
