@@ -7,18 +7,19 @@ import subprocess
 
 #spotdict name : [connection, strength, loc X, loc Y], node gets appended behind it once the script starts
 spotDict = {
-    'RPI_AP2' : [False, 0, 50, 50],
-    'Connectify-me' : [False, 0, 180, 70],
+    'RPI_AP2' : [False, 0, 50, 150],
+    'Connectify-me' : [False, 0, 180, 90],
     'tempMichelLoc' : [False, 0, 220, 50],
     'NogEenTest' : [False, 0, 230, 250],
-    'RPI_AP1' : [False, 0, 50, 150],
+    'RPI_AP1' : [False, 0, 50, 50],
     'RPI_AP3' : [False, 0, 50 , 250]
 }
 
 connectDict = {
-    'RPI_AP2' : ['Connectify-me', 'tempMichelLoc'],
+    'RPI_AP2' : ['Connectify-me', 'tempMichelLoc', 'RPI_AP1'],
     'Connectify-me' : ['NogEenTest'],
-    'tempMichelLoc' : ['NogEenTest', 'Connectify-me']
+    'tempMichelLoc' : ['NogEenTest', 'Connectify-me'],
+    'RPI_AP3' : ['RPI_AP2']
 }
 
 userList = []
@@ -137,27 +138,29 @@ def updateUser(canvas, user, points):
 
     sumDif = 0
     counter = 0
-    for each in xCoords[0:-2]:
-        if xCoords[counter] > xCoords[counter+1]:
-            sumDif = xCoords[counter] - xCoords[counter+1]
-            xCoords[counter+1] = xCoords[counter] - sumDif /2
-            counter += 1
-        else:
-            xCoords[counter+1] - xCoords[counter]
-            xCoords[counter+1] = xCoords[counter+1] - sumDif /2
-            counter +=1
+    for each in xCoords:
+        if counter < len(xCoords)-1:
+            if xCoords[counter] > xCoords[counter+1]:
+                sumDif = xCoords[counter] - xCoords[counter+1]
+                xCoords[counter+1] = xCoords[counter] - sumDif /2
+                counter += 1
+            else:
+                xCoords[counter+1] - xCoords[counter]
+                xCoords[counter+1] = xCoords[counter+1] - sumDif /2
+                counter +=1
 
     sumDif = 0
     counter = 0
-    for each in yCoords[0:-2]:
-        if yCoords[counter] > yCoords[counter+1]:
-            sumDif = yCoords[counter] - yCoords[counter+1]
-            yCoords[counter+1] = yCoords[counter] - sumDif /2
-            counter += 1
-        else:
-            yCoords[counter+1] - yCoords[counter]
-            yCoords[counter+1] = yCoords[counter+1] - sumDif /2
-            counter +=1
+    for each in yCoords:
+        if counter <len(yCoords)-1:
+            if yCoords[counter] > yCoords[counter+1]:
+                sumDif = yCoords[counter] - yCoords[counter+1]
+                yCoords[counter+1] = yCoords[counter] - sumDif /2
+                counter += 1
+            else:
+                yCoords[counter+1] - yCoords[counter]
+                yCoords[counter+1] = yCoords[counter+1] - sumDif /2
+                counter +=1
 
     #print(xCoords[-1])
     #print(yCoords[-1])
