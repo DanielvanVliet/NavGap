@@ -50,6 +50,7 @@ def updateList():
                 print('{} set to true, breaking for loop, current str: {}'.format(essid, rowdata))
                 spotDict[spot][0] = True
                 spotDict[spot][1] = rowdata
+                userList.append(essid)
                 break
             else:
                 if spotDict[spot][0] == True and essid == spot:
