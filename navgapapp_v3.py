@@ -31,53 +31,53 @@ def updateList():
 
     trueCount = 0
     ## use this when testing on pi
-    # result = subprocess.getoutput(updateCmd)
-    # for spot in spotDict:
-    #     row = 0
-    #     for line in result.split('\n'):
-    #         row += 1
-    #         essid = line[27:-1]
-    #         signal = line[49:51]
-    #         #print(essid)
-    #         #print(signal)
-    #         if row % 2 == 1:
-    #             rowdata = signal
-    #             #print(rowdata)
-    #         if essid == spot and int(rowdata) <= 70: # -75 = range limiter
-    #             print('{} set to true, breaking for loop, current str: {}'.format(essid, rowdata))
-    #             spotDict[spot][0] = True
-    #             spotDict[spot][1] = rowdata
-    #             break
-    #         else:
-    #             if spotDict[spot][0] == True and essid == spot:
-    #                 print('{} set to false, last str: {}'.format(essid, rowdata))
-    #             spotDict[spot][0] = False
-    #             #print('{} set to false'.format(essid))
+    result = subprocess.getoutput(updateCmd)
+    for spot in spotDict:
+        row = 0
+        for line in result.split('\n'):
+            row += 1
+            essid = line[27:-1]
+            signal = line[49:51]
+            #print(essid)
+            #print(signal)
+            if row % 2 == 1:
+                rowdata = signal
+                #print(rowdata)
+            if essid == spot and int(rowdata) <= 70: # -75 = range limiter
+                print('{} set to true, breaking for loop, current str: {}'.format(essid, rowdata))
+                spotDict[spot][0] = True
+                spotDict[spot][1] = rowdata
+                break
+            else:
+                if spotDict[spot][0] == True and essid == spot:
+                    print('{} set to false, last str: {}'.format(essid, rowdata))
+                spotDict[spot][0] = False
+                #print('{} set to false'.format(essid))
 
     ## this is for pc testing, rips info from old log
-    for spot in spotDict:
-        print(' | Connection: {:15}: {}, strength: {}'.format(spot, spotDict[spot][0], spotDict[spot][1]))
-        with open('log.csv', 'r') as file:
-            reader = csv.reader(file)
-            row = 0
-            for line in reader:
-                row += 1
-                essid = line[0][27:-1]
-                signal = line[0][49:51]
-                #print(spot)
-                #print(essid)
-                if row % 2 == 1:
-                    rowdata = signal
-                    #print(rowdata)
-                if essid == spot and int(rowdata) <= 70: # range limiter
-                    print('{} set to true, breaking for-loop'.format(essid))
-                    spotDict[spot][0] = True
-                    spotDict[spot][1] = rowdata
-                    userList.append(essid)
-                    break
-                else:
-                    spotDict[spot][0] = False
-                    #print('{} set to false'.format(essid))
+    # for spot in spotDict:
+    #     print(' | Connection: {:15}: {}, strength: {}'.format(spot, spotDict[spot][0], spotDict[spot][1]))
+    #     with open('log.csv', 'r') as file:
+    #         reader = csv.reader(file)
+    #         row = 0
+    #         for line in reader:
+    #             row += 1
+    #             essid = line[0][27:-1]
+    #             signal = line[0][49:51]
+    #             #print(spot)
+    #             #print(essid)
+    #             if row % 2 == 1:
+    #                 rowdata = signal
+    #                 #print(rowdata)
+    #             if essid == spot and int(rowdata) <= 70: # range limiter
+    #                 print('{} set to true, breaking for-loop'.format(essid))
+    #                 spotDict[spot][0] = True
+    #                 spotDict[spot][1] = rowdata
+    #                 userList.append(essid)
+    #                 break
+    #             else:
+    #                 spotDict[spot][0] = False
+    #                 #print('{} set to false'.format(essid))
 
     print('user inbetween: {}'.format(userList))
 
