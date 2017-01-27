@@ -19,17 +19,17 @@ connectDict = {
     'tempMichelLoc' : ['NogEenTest', 'Connectify-me']
 }
 
+userList = []
 
 ## updates the list of connections ##
 def updateList():
     global spotDict
-    essidList = []
-    signalList = []
+    global userList
+    userList = []
     print('# update list #')
     updateCmd = 'sudo iwlist wlan0 scan |grep -e Signal -e ESSID'
-    #updateCmd = 'sudo bash /home/pi/github/NavGap/navgapboot.sh start'
-    #os.system(updateCmd)
 
+    trueCount = 0
     ## use this when testing on pi
     # result = subprocess.getoutput(updateCmd)
     # for spot in spotDict:
@@ -73,16 +73,21 @@ def updateList():
                     print('{} set to true, breaking for-loop'.format(essid))
                     spotDict[spot][0] = True
                     spotDict[spot][1] = rowdata
+                    userList.append(essid)
                     break
                 else:
                     spotDict[spot][0] = False
                     #print('{} set to false'.format(essid))
+
+    print('user inbetween: {}'.format(userList))
+
 
 
 ## GUI ##
 blue = '#08088A'
 yellow = '#FFFF00'
 red = '#FF0000'
+green = '#3ADF00'
 running = False
 
 def createOval(canvas, spotName, x, y):
@@ -97,14 +102,15 @@ def createOval(canvas, spotName, x, y):
     #nodeDict[nodeName] = [create, x, y]
     spotDict[spotName].append([create, x, y])
 
-def createOvalSolo(canvas, x, y):
+def createUser(canvas, x, y):
     ovalSize = 4
     print('creating (solo node) at {}, {}'.format(x, y))
     nodeLoc = [
         [(x-ovalSize), (y-ovalSize)],
         [(x+ovalSize), (y+ovalSize)]
     ]
-    canvas.create_oval(nodeLoc[0][0], nodeLoc[0][1], nodeLoc[1][0], nodeLoc[1][1], fill=blue, activefill=red)
+    global user
+    user = canvas.create_oval(nodeLoc[0][0], nodeLoc[0][1], nodeLoc[1][0], nodeLoc[1][1], fill=green, activefill=red)
 
 def createConnection(canvas, point1, point2):
     # (x1, y1, x2, y2)
@@ -114,25 +120,73 @@ def createConnection(canvas, point1, point2):
                                                                                spotDict[point2][2], spotDict[point2][3]))
     canvas.create_line(spotDict[point1][2], spotDict[point1][3], spotDict[point2][2], spotDict[point2][3])
 
-    xPoint1 = spotDict[point1][2]
-    yPoint1 = spotDict[point1][3]
-    xPoint2 = spotDict[point2][2]
-    yPoint2 = spotDict[point2][3]
+    # xPoint1 = spotDict[point1][2]
+    # yPoint1 = spotDict[point1][3]
+    # xPoint2 = spotDict[point2][2]
+    # yPoint2 = spotDict[point2][3]
+    #
+    # if xPoint1 >= xPoint2:
+    #     sumDif = xPoint1 - xPoint2
+    #     ovalX = xPoint1 - sumDif/2
+    # else:
+    #     sumDif = xPoint2 - xPoint1
+    #     ovalX = xPoint2 - sumDif/2
+    #
+    # if yPoint1 >= yPoint2:
+    #     sumDif = yPoint1 - yPoint2
+    #     ovalY = yPoint1 - sumDif/2
+    # else:
+    #     sumDif = yPoint2 - yPoint1
+    #     ovalY = yPoint2 - sumDif/2
+    # createOvalSolo(canvas, ovalX, ovalY)
 
-    if xPoint1 >= xPoint2:
-        sumDif = xPoint1 - xPoint2
-        ovalX = xPoint1 - sumDif/2
-    else:
-        sumDif = xPoint2 - xPoint1
-        ovalX = xPoint2 - sumDif/2
+#triangulation (pseudo)
+def updateUser(canvas, user, points):
+    xCoords = []
+    yCoords = []
 
-    if yPoint1 >= yPoint2:
-        sumDif = yPoint1 - yPoint2
-        ovalY = yPoint1 - sumDif/2
-    else:
-        sumDif = yPoint2 - yPoint1
-        ovalY = yPoint2 - sumDif/2
-    createOvalSolo(canvas, ovalX, ovalY)
+    for each in points:
+        #print(each)
+        #print(spotDict[each][2], spotDict[each][3])
+        xCoords.append(spotDict[each][2])
+        yCoords.append(spotDict[each][3])
+
+    sumDif = 0
+    counter = 0
+    for each in xCoords[0:-1]:
+        if xCoords[counter] > xCoords[counter+1]:
+            sumDif = xCoords[counter] - xCoords[counter+1]
+            xCoords[counter+1] = xCoords[counter] - sumDif /2
+            counter += 1
+        else:
+            xCoords[counter+1] - xCoords[counter]
+            xCoords[counter+1] = xCoords[counter+1] - sumDif /2
+            counter +=1
+
+    sumDif = 0
+    counter = 0
+    for each in yCoords[0:-1]:
+        if yCoords[counter] > yCoords[counter+1]:
+            sumDif = yCoords[counter] - yCoords[counter+1]
+            yCoords[counter+1] = yCoords[counter] - sumDif /2
+            counter += 1
+        else:
+            yCoords[counter+1] - yCoords[counter]
+            yCoords[counter+1] = yCoords[counter+1] - sumDif /2
+            counter +=1
+
+    #print(xCoords[-1])
+    #print(yCoords[-1])
+
+    ovalSize = 4
+    nodeLoc = [
+        [(xCoords[-1]-ovalSize), (yCoords[-1]-ovalSize)],
+        [(xCoords[-1]+ovalSize), (yCoords[-1]+ovalSize)]
+    ]
+    canvas.coords(user, nodeLoc[0][0], nodeLoc[0][1], nodeLoc[1][0], nodeLoc[1][1])
+
+
+    #canvas.coords(user, xCoords[-1], yCoords[-1])
 
 def changeNodeColor(canvas, spotName, color):
     canvas.itemconfig(spotDict[spotName][-1][0], fill=color)
@@ -152,6 +206,8 @@ def updateNodes(canvas):
         else:
             changeNodeColor(canvas, each, blue)
 
+
+##### UI LOOP #####
 def createUI():
     print('# creating UI #')
     running = True
@@ -176,12 +232,15 @@ def createUI():
     exit = tkinter.Button(text='exit', command=lambda :stopApp(root))
     exit_place = canvas.create_window(20, 30, window=exit)
 
+    createUser(canvas, WIDTH/2, HEIGHT/2)
     counter = 0
+
     while running:
         if counter > 500:
             updateList()
             counter = -1
 
+        updateUser(canvas,user, userList)
         updateNodes(canvas)
         root.update_idletasks()
         root.update()
@@ -190,6 +249,7 @@ def createUI():
 
 ## app boot loop ##
 while True:
+    print('running on {}'.format(os.name))
     updateList()
     print(spotDict)
     text = input(' | null = update list \n | break = nuke app \n | start = start app \n >')
