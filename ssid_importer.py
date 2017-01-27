@@ -14,6 +14,5 @@ curs.execute("SELECT * FROM Locations")
 connection.commit()
 
 for row in curs.fetchall():
-	ssid_dict[row[0]] = row[2]
+	ssid_dict[row[0]] = [False, 0, row[1], row[2]]
 print(ssid_dict)
-
