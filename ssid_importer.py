@@ -9,10 +9,10 @@ connection = pymysql.connect(host='localhost',
 curs = connection.cursor()
 
 #Imports ssid from db into python dictionary
-ssid_dict = {}
+spotDict = {}
 curs.execute("SELECT * FROM Locations")
 connection.commit()
 
 for row in curs.fetchall():
-	ssid_dict[row[0]] = [False, 0, row[1], row[2]]
-print(ssid_dict)
+	spotDict[row[0]] = [False, 0, row[1], row[2]]
+print(spotDict)
