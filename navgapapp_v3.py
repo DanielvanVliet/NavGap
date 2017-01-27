@@ -249,7 +249,7 @@ def createUI():
 
 ## app boot loop ##
 while True:
-    print('running on {}'.format(os.name))
+    print('running on {}'.format(os.name)) # windows = nt, kijken wat rpi is!
     updateList()
     print(spotDict)
     text = input(' | null = update list \n | break = nuke app \n | start = start app \n >')
