@@ -6,9 +6,8 @@ import tkinter
 
 ## Variables ##
 conList = [
-        'MarcKYS',
-        'essidhere',
-        'Connectify-me'
+        'Connectify-me',
+        'RPI_AP2'
 ]
 
 EssidList = []
@@ -82,6 +81,8 @@ def changeNodeColor(canvas, node, color):
     canvas.itemconfig(node, fill=color)
 
 def createUI():
+    global conList
+    global tlist
     running = True
     x0, y0 = 10, 50
     x1, y1 = 50, 90
@@ -91,8 +92,8 @@ def createUI():
     base = tkinter.Tk()
     canvas = tkinter.Canvas(base, width=WIDTH, height=HEIGHT)
     canvas.grid()
-    base.overrideredirect(True)
-    base.geometry("{0}x{1}+0+0".format(base.winfo_screenwidth(), base.winfo_screenheight()))
+    #base.overrideredirect(True)
+    #base.geometry("{0}x{1}+0+0".format(base.winfo_screenwidth(), base.winfo_screenheight()))
 
 
     # (loc X, locY, x, y)
@@ -103,7 +104,7 @@ def createUI():
     def stopApp():
         global running
         running = False
-
+        
     counter = 0
 
     exit = tkinter.Button(text='exit', command = stopApp())
@@ -119,19 +120,58 @@ def createUI():
     curList = []
     #base.mainloop()
     base.update()
+    ## Update Loop ##
     while running == True:
+        EssidList = []
+        SignalList = []
+        tlist = []
+        os.system(updateCmd)
+        with open('log.csv', 'r') as myCSVFile:
+            reader = csv.reader(myCSVFile)
+            row = 0
+            for each in reader:
+                #print(each)
+                row += 1
+                if row % 2 == 1: #if even
+                    #print(each[0][48:52])
+                    EssidList.append(each[0][48:51])
+                else:
+                    #print(each[0][27:-2])
+                    SignalList.append(each[0][27:-1])
+                    checkConnection(each[0][27:-1])
+
+        for essid in SignalList:
+                tlist.append([essid])
+        count = 0
+        for signal in EssidList:
+                tlist[count].append(signal)
+                count +=1
+        print(tlist)
         time.sleep(0.1)
         print('update node color')
         print(counter)
         canvas.coords(load, 100, 200, counter, 250)
         for eachCon in conList:
-            for eachT in tlist:
-                #print('name: {}, signal: {}'.format(eachT[0], eachT[1]))
-                if eachT[0][0] == eachCon: # and eachT[1] > 40:
-                    curList.append(eachT[0], eachT[1], True)
-                    print('name: {}, signal: {}'.format(eachT[0], eachT[1]))
-
-                    changeNodeColor(canvas, o3, yellow)
+                for eachCur in curList:
+                        if eachCon == eachCur[0]:
+                            for eachT in tlist:
+                                print('name: {}, signal: {}'.format(eachT[0], eachT[1]))
+                                print('checking if {} == {}'.format(eachCon, eachT))
+                                if eachCon == eachT[0]: # and eachT[1] > 40:
+                                    curList.append([eachT[0], eachT[1], True])
+                                    print('####')
+                                    print('name: {}, signal: {}'.format(eachT[0], eachT[1]))
+                                    changeNodeColor(canvas, o3, yellow)
+        #print(curList)
+        for each in curList:
+                for eachT in tlist:
+                    if each[0] is eachT[0]:
+                        each[2] = True
+                        changeNodeColor(canvas, o3, yellow)
+                        break
+                    else:
+                        each[2] = False
+                        changeNodeColor(canvas, o3, blue)
 
 
         base.update_idletasks()
@@ -139,8 +179,9 @@ def createUI():
         #if counter <= 100:
             #counter += 1
             #running = False
-        if counter == 100:
+        if counter == 2000:
             running = False
+            break
         counter += 1
 
 createUI()
@@ -148,6 +189,6 @@ createUI()
 print()
 print()
 for each in tlist:
-	print('{} : {}'.format(each[0],each[1]))
+        print('{} : {}'.format(each[0],each[1]))
 
 
