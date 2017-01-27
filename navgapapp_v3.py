@@ -228,6 +228,7 @@ def createUI():
         if counter > 500:
             updateList()
             counter = -1
+            time.sleep(0.1)
             updateUser(canvas,user, userList)
 
         updateNodes(canvas)
