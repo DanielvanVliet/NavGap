@@ -167,9 +167,10 @@ def updateUser(canvas, user, points):
 
     ovalSize = 4
     nodeLoc = [
-        [(xCoords[-1]-ovalSize), (yCoords[-1]-ovalSize)],
-        [(xCoords[-1]+ovalSize), (yCoords[-1]+ovalSize)]
+        [(xCoords[-1])-ovalSize, (yCoords[-1])-ovalSize],
+        [(xCoords[-1])+ovalSize, (yCoords[-1])+ovalSize]
     ]
+    #print(nodeLoc)
     canvas.coords(user, nodeLoc[0][0], nodeLoc[0][1], nodeLoc[1][0], nodeLoc[1][1])
 
 
