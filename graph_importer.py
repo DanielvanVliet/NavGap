@@ -14,7 +14,6 @@ def import_graph():
 	connection.commit()
 	for row in curs.fetchall():
 		locations.append(row[0])
-
 	graph = {}
 
 	for each in locations:
@@ -24,9 +23,9 @@ def import_graph():
 		temp = []
 		for row in curs.fetchall():
 			if row[0] == each:
-				temp.append([str(row[1]), int(row[2])])
+				temp.append([str(row[1]), str(row[2])])
 		for neighbor in temp:
 			graph[each][neighbor[0]] = neighbor[1] 
 	connection.close()
 	return graph
-import_graph()
+print(import_graph())

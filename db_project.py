@@ -19,12 +19,10 @@ def add_lines(location1, location2, distance):
 	print("next connection between location")
 	print()
 
-def add_lines2(location, description, ssid):
-	location = "'" + location + "'"
-	description = "'" + description + "'"
+def add_lines2(ssid, x ,y):
 	ssid = "'" + ssid + "'"
 	print(ssid)
-	query = "INSERT INTO Locations values("+location+', '+description+", "+ssid+")"
+	query = "INSERT INTO Locations values("+ssid+", "+ str(x)+ ", "+ str(y)+ ")"
 	print("Query = "+query)
 	curs.execute(query)
 	connection.commit()
@@ -37,14 +35,14 @@ def drop_table(name):
 	connection.commit()
 
 def create_locationConnections():
-	query = "CREATE TABLE LocationConnections(Location1 varchar(1), Location2 varchar(1), Afstand NUMERIC)"
+	query = "CREATE TABLE LocationConnections(Location1 text, Location2 text, Afstand NUMERIC)"
 	print("Query = "+query)
 	curs.execute(query)
 	connection.commit()
 	print("Table LocationConnections created")
 
 def create_locations():
-	query = "CREATE TABLE Locations(Location varchar(1), Description text, SSID text)"
+	query = "CREATE TABLE Locations(SSID text, xvalue text, yvalue text)"
 	print("Query = "+query)
 	curs.execute(query)
 	connection.commit()
@@ -53,20 +51,20 @@ def create_locations():
 def add_locationConnections(number):
 	counter = 0
 	while counter != number:
-		L1 = input("Location1?")
-		L2 = input("Location2?")
-		D = input("Afstand tussen Location1 en Location2?")
+		L1 = input("Wifi-SSID1? ")
+		L2 = input("Wifi-SSID2? ")
+		D = input("Afstand tussen Wifi-SSID1 en Wifi-SSID2? ")
 		counter += 1
 		add_lines(L1, L2, D)
 
 def add_location(number):
 	counter = 0
 	while counter != number:
-		L = input("Location? ")
-		d = input("Descripion of this location? (for example A - Aap): ")
 		W = input("Wifi-SSID for this location? ")
+		X = input("X for this location? ")
+		Y = input("Y for this location? ")
 		counter += 1
-		add_lines2(L, d, W)
+		add_lines2(W, X, Y)
 
 def displaytable(table):
 	query = "SELECT * FROM "+str(table)
