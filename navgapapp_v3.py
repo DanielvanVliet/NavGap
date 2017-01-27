@@ -35,6 +35,7 @@ def updateList():
     ## use this when testing on pi
     result = subprocess.getoutput(updateCmd)
     if len(result) > 0:
+        userList = []
         for spot in spotDict:
             row = 0
             for line in result.split('\n'):
