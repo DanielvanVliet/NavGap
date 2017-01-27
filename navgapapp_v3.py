@@ -227,7 +227,7 @@ def createUI():
         if counter > 500:
             updateList()
             counter = -1
-            #updateUser(canvas,user, userList)
+            updateUser(canvas,user, userList)
 
         updateNodes(canvas)
         root.update_idletasks()
