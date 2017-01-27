@@ -28,35 +28,36 @@ userList = []
 def updateList():
     global spotDict
     global userList
-    userList = []
     print('# update list #')
     updateCmd = 'sudo iwlist wlan0 scan |grep -e Signal -e ESSID'
 
     trueCount = 0
     ## use this when testing on pi
     result = subprocess.getoutput(updateCmd)
-    for spot in spotDict:
-        row = 0
-        for line in result.split('\n'):
-            row += 1
-            essid = line[27:-1]
-            signal = line[49:51]
-            #print(essid)
-            #print(signal)
-            if row % 2 == 1:
-                rowdata = signal
-                #print(rowdata)
-            if essid == spot and int(rowdata) <= 70: # -75 = range limiter
-                print('{} set to true, breaking for loop, current str: {}'.format(essid, rowdata))
-                spotDict[spot][0] = True
-                spotDict[spot][1] = rowdata
-                userList.append(essid)
-                break
-            else:
-                if spotDict[spot][0] == True and essid == spot:
-                    print('{} set to false, last str: {}'.format(essid, rowdata))
-                spotDict[spot][0] = False
-                #print('{} set to false'.format(essid))
+    if len(result) > 0:
+        userList = []
+        for spot in spotDict:
+            row = 0
+            for line in result.split('\n'):
+                row += 1
+                essid = line[27:-1]
+                signal = line[49:51]
+                #print(essid)
+                #print(signal)
+                if row % 2 == 1:
+                    rowdata = signal
+                    #print(rowdata)
+                if essid == spot and int(rowdata) <= 70: # -75 = range limiter
+                    print('{} set to true, breaking for loop, current str: {}'.format(essid, rowdata))
+                    spotDict[spot][0] = True
+                    spotDict[spot][1] = rowdata
+                    userList.append(essid)
+                    break
+                else:
+                    if spotDict[spot][0] == True and essid == spot:
+                        print('{} set to false, last str: {}'.format(essid, rowdata))
+                    spotDict[spot][0] = False
+                    #print('{} set to false'.format(essid))
 
     ## this is for pc testing, rips info from old log
     # if os.name == 'nt':
