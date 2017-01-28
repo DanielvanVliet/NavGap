@@ -1,17 +1,17 @@
                     Quality=43/70  Signal level=-67 dBm  
-                    ESSID:"Connectify-m"
+                    ESSID:"Connectify-me"
                     Quality=41/70  Signal level=-69 dBm  
                     ESSID:"tempMichelLoc"
                     Quality=41/70  Signal level=-69 dBm
-                    ESSID:"RPI_AP2"
+                    ESSID:"RPI_AP1"
                     Quality=41/70  Signal level=-69 dBm  
                     ESSID:"StudentsInc"
-                    Quality=35/70  Signal level=-75 dBm  
-                    ESSID:"LifeCycleAgent"
+                    Quality=35/70  Signal level=-60 dBm
+                    ESSID:"RPI_AP3"
                     Quality=25/70  Signal level=-85 dBm  
                     ESSID:"Agilemanufacturing"
-                    Quality=21/70  Signal level=-89 dBm  
-                    ESSID:"Renske"
+                    Quality=21/70  Signal level=-65 dBm
+                    ESSID:"RPI_AP2"
                     Quality=25/70  Signal level=-85 dBm  
                     ESSID:"eduroam"
                     Quality=27/70  Signal level=-83 dBm  
