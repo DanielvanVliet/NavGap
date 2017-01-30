@@ -61,10 +61,8 @@ def updateList():
     # print('user inbetween: {}'.format(userList))
 
     ## this is for pc testing, rips info from old log
-    # if os.name == 'nt':
-    userList = []
     for spot in spotDict:
-        #print(' | Connection: {:15}: {}, strength: {}'.format(spot, spotDict[spot][0], spotDict[spot][1]))
+        print(' | Connection: {:15}: {}, strength: {}'.format(spot, spotDict[spot][0], spotDict[spot][1]))
         with open('log.csv', 'r') as file:
             reader = csv.reader(file)
             row = 0
@@ -77,17 +75,15 @@ def updateList():
                 if row % 2 == 1:
                     rowdata = signal
                     #print(rowdata)
-                if essid == spot and int(rowdata) <= 75: # range limiter
-                    if spotDict[spot][0] == False:
-                        #print('{} found, set to true'.format(essid))
-                        spotDict[spot][0] = True
-                        spotDict[spot][1] = rowdata
-                        userList.append(essid)
+                if essid == spot and int(rowdata) <= 70: # range limiter
+                    print('{} set to true, breaking for-loop'.format(essid))
+                    spotDict[spot][0] = True
+                    spotDict[spot][1] = rowdata
+                    userList.append(essid)
                     break
                 else:
                     spotDict[spot][0] = False
                     #print('{} set to false'.format(essid))
-    print('user inbetween: {}'.format(userList))
 
 
 
@@ -129,73 +125,52 @@ def createConnection(canvas, point1, point2):
     canvas.create_line(spotDict[point1][2], spotDict[point1][3], spotDict[point2][2], spotDict[point2][3])
 
 #triangulation (pseudo)
-
-# >>> student_tuples = [
-#         ('john', 'A', 15),
-#         ('jane', 'B', 12),
-#         ('dave', 'B', 10),
-# ]
-# >>> sorted(student_tuples, key=lambda student: student[2])   # sort by age
-# [('dave', 'B', 10), ('jane', 'B', 12), ('john', 'A', 15)]
 def updateUser(canvas, user, points):
-    pointList = []
-    point1x, point1y = 0, 0
-    point2x, point2y = 0, 0
-    point3x, point3y = 0, 0
-    nUserX, newUserY = 0, 0
+    xCoords, yCoords = [], []
+    newX, newY = 0,0
 
     for each in points:
-        pointList.append([each, int(spotDict[each][1])])
+        #print(each)
+        #print(spotDict[each][2], spotDict[each][3])
+        xCoords.append(spotDict[each][2])
+        yCoords.append(spotDict[each][3])
 
-    print(pointList)
-    print(sorted(pointList, key=lambda point: point[1]))
-
-    # for each in points:
-    #
-    #     xCoords.append(spotDict[each][2])
-    #     yCoords.append(spotDict[each][3])
-
-    #print(xCoords)
-    #print(yCoords)
 
     # sumDif = 0
     # counter = 0
-    # for each in xCoords:
-    #     if counter < len(xCoords)-1:
-    #         if xCoords[counter] > xCoords[counter+1]:
-    #             sumDif = xCoords[counter] - xCoords[counter+1]
-    #             xCoords[counter+1] = xCoords[counter] - sumDif /2
-    #             counter += 1
-    #         else:
-    #             xCoords[counter+1] - xCoords[counter]
-    #             xCoords[counter+1] = xCoords[counter+1] - sumDif /2
-    #             counter +=1
+    # # for each in xCoords:
+    # #     if xCoords[counter] > xCoords[counter+1]:
+    # #         sumDif = xCoords[counter] - xCoords[counter+1]
+    # #         xCoords[counter+1] = xCoords[counter] - sumDif /2
+    # #         counter += 1
+    # #     else:
+    # #         xCoords[counter+1] - xCoords[counter]
+    # #         xCoords[counter+1] = xCoords[counter+1] - sumDif /2
+    # #         counter +=1
+    # #
+    # # sumDif = 0
+    # # counter = 0
+    # # for each in yCoords:
+    # #     if yCoords[counter] > yCoords[counter+1]:
+    # #         sumDif = yCoords[counter] - yCoords[counter+1]
+    # #         yCoords[counter+1] = yCoords[counter] - sumDif /2
+    # #         counter += 1
+    # #     else:
+    # #         yCoords[counter+1] - yCoords[counter]
+    # #         yCoords[counter+1] = yCoords[counter+1] - sumDif /2
+    # #         counter +=1
     #
-    # sumDif = 0
-    # counter = 0
-    # for each in yCoords:
-    #     if counter <len(yCoords)-1:
-    #         if yCoords[counter] > yCoords[counter+1]:
-    #             sumDif = yCoords[counter] - yCoords[counter+1]
-    #             yCoords[counter+1] = yCoords[counter] - sumDif /2
-    #             counter += 1
-    #         else:
-    #             yCoords[counter+1] - yCoords[counter]
-    #             yCoords[counter+1] = yCoords[counter+1] - sumDif /2
-    #             counter +=1
-
-    #print(xCoords[-1])
-    #print(yCoords[-1])
+    # #print(xCoords[-1])
+    # #print(yCoords[-1])
 
 
-    # ovalSize = 4
-    # nodeLoc = [
-    #     [(xCoords[-1])-ovalSize, (yCoords[-1])-ovalSize],
-    #     [(xCoords[-1])+ovalSize, (yCoords[-1])+ovalSize]
-    # ]
-    # #print(nodeLoc)
-    # print(nodeLoc)
-    # canvas.coords(user, nodeLoc[0][0], nodeLoc[0][1], nodeLoc[1][0], nodeLoc[1][1])
+    ovalSize = 4
+    nodeLoc = [
+        [(xCoords[-1])-ovalSize, (yCoords[-1])-ovalSize],
+        [(xCoords[-1])+ovalSize, (yCoords[-1])+ovalSize]
+    ]
+    #print(nodeLoc)
+    canvas.coords(user, nodeLoc[0][0], nodeLoc[0][1], nodeLoc[1][0], nodeLoc[1][1])
 
 
     #canvas.coords(user, xCoords[-1], yCoords[-1])
