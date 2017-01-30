@@ -7,17 +7,25 @@ import subprocess
 
 #spotdict name : [connection, strength, loc X, loc Y], node gets appended behind it once the script starts
 spotDict = {
-    'RPI_AP2' : [False, 0, 50, 150],
-    'Connectify-me' : [False, 0, 180, 90],
     'RPI_AP1' : [False, 0, 50, 50],
-    'RPI_AP3' : [False, 0, 50 , 250]
+    'RPI_AP2' : [False, 0, 150, 50],
+    'RPI_AP3' : [False, 0, 50, 150],
+    'RPI_AP4' : [False, 0, 150 , 150],
+    'RPI_DB' : [False, 0, 100, 100]
 }
+#
+# RPI1 RPI2, RPI_DB, RPI3
+# RPI3 RPI4 RPI1
+# RPI4 RPI3 RPI2
+# RPI2 RPI1 RPI4 RPI DB
+# RPI DB PRI1 RPI2
 
 connectDict = {
-    'RPI_AP2' : ['Connectify-me', 'tempMichelLoc', 'RPI_AP1'],
-    'Connectify-me' : ['NogEenTest'],
-    'tempMichelLoc' : ['NogEenTest', 'Connectify-me'],
-    'RPI_AP3' : ['RPI_AP2']
+    'RPI_AP1' : ['RPI_AP2', 'RPI_DB', 'RPI_AP3'],
+    'RPI_AP2' : ['RPI_AP1', 'RPI_DB', 'RPI_AP4'],
+    'RPI_AP3' : ['RPI_AP4', 'RPI_AP1'],
+    'RPI_AP4' : ['RPI_AP3', 'RPI_AP2'],
+    'RPI_DB' : ['RPI_AP1', 'RPI_AP2']
 }
 
 userList = []
@@ -59,8 +67,10 @@ def updateList():
     # print('user inbetween: {}'.format(userList))
 
     ## this is for pc testing, rips info from old log
+    # if os.name == 'nt':
+    userList = []
     for spot in spotDict:
-        print(' | Connection: {:15}: {}, strength: {}'.format(spot, spotDict[spot][0], spotDict[spot][1]))
+        #print(' | Connection: {:15}: {}, strength: {}'.format(spot, spotDict[spot][0], spotDict[spot][1]))
         with open('log.csv', 'r') as file:
             reader = csv.reader(file)
             row = 0
@@ -73,15 +83,17 @@ def updateList():
                 if row % 2 == 1:
                     rowdata = signal
                     #print(rowdata)
-                if essid == spot and int(rowdata) <= 70: # range limiter
-                    print('{} set to true, breaking for-loop'.format(essid))
-                    spotDict[spot][0] = True
-                    spotDict[spot][1] = rowdata
-                    userList.append(essid)
+                if essid == spot and int(rowdata) <= 75: # range limiter
+                    if spotDict[spot][0] == False:
+                        #print('{} found, set to true'.format(essid))
+                        spotDict[spot][0] = True
+                        spotDict[spot][1] = rowdata
+                        userList.append(essid)
                     break
                 else:
                     spotDict[spot][0] = False
                     #print('{} set to false'.format(essid))
+    print('user inbetween: {}'.format(userList))
 
 
 
@@ -101,8 +113,10 @@ def createOval(canvas, spotName, x, y):
     ]
     create = canvas.create_oval(nodeLoc[0][0], nodeLoc[0][1], nodeLoc[1][0], nodeLoc[1][1], fill=blue, activefill=red)
     global spotDict
+    createLabel = canvas.create_text(x, (y+20), text=spotName)
     #nodeDict[nodeName] = [create, x, y]
-    spotDict[spotName].append([create, x, y])
+    #spotDict[spotName].append([create, x, y])
+    spotDict[spotName].append([create, createLabel, x, y])
 
 def createUser(canvas, x, y):
     ovalSize = 4
@@ -122,52 +136,92 @@ def createConnection(canvas, point1, point2):
                                                                                spotDict[point2][2], spotDict[point2][3]))
     canvas.create_line(spotDict[point1][2], spotDict[point1][3], spotDict[point2][2], spotDict[point2][3])
 
-#triangulation (pseudo)
+
 def updateUser(canvas, user, points):
-    xCoords, yCoords = [], []
-    newX, newY = 0,0
-
+    pointList = []
     for each in points:
-        #print(each)
-        #print(spotDict[each][2], spotDict[each][3])
-        xCoords.append(spotDict[each][2])
-        yCoords.append(spotDict[each][3])
+        pointList.append([each, int(spotDict[each][1])])
+
+    sortedPointList = sorted(pointList, key=lambda point: point[1])
+
+    point1 = spotDict[sortedPointList[0][0]]
+    point1x, point1y = spotDict[sortedPointList[0][0]][2], spotDict[sortedPointList[0][0]][3]
+    if len(pointList) > 1:
+        point2x, point2y = spotDict[sortedPointList[1][0]][2], spotDict[sortedPointList[1][0]][3]
+        if len(pointList) > 2:
+            point3x, point3y = spotDict[sortedPointList[2][0]][2], spotDict[sortedPointList[2][0]][3]
+
+    nUserX, newUserY = 0, 0
+
+    print(pointList)
+    print(sortedPointList[0][0])
+    print(spotDict[sortedPointList[0][0]][2])
+    print()
+
+    # A>B?
+    # Bx - Ax = Dif
+    # Bx - (dif/2) = newX
+
+    # calculate new x
+    if len(pointList) > 2:
+        if point2x > point3x:
+            dif = point2x - point3x
+            newUserX = point2x - (dif/2)
+        else:
+            dif = point3x - point2x
+            newUserX = point3x - (dif/2)
+
+    if len(pointList) > 1:
+        if newUserX > 0:
+            if newUserX > point1x:
+                dif = newUserX - point1x
+                newUserX = newUserX - (dif/2)
+            else:
+                dif = point1x - newUserX
+                newUserX = point1x - (dif/2)
 
 
-    # sumDif = 0
-    # counter = 0
-    # # for each in xCoords:
-    # #     if xCoords[counter] > xCoords[counter+1]:
-    # #         sumDif = xCoords[counter] - xCoords[counter+1]
-    # #         xCoords[counter+1] = xCoords[counter] - sumDif /2
-    # #         counter += 1
-    # #     else:
-    # #         xCoords[counter+1] - xCoords[counter]
-    # #         xCoords[counter+1] = xCoords[counter+1] - sumDif /2
-    # #         counter +=1
-    # #
-    # # sumDif = 0
-    # # counter = 0
-    # # for each in yCoords:
-    # #     if yCoords[counter] > yCoords[counter+1]:
-    # #         sumDif = yCoords[counter] - yCoords[counter+1]
-    # #         yCoords[counter+1] = yCoords[counter] - sumDif /2
-    # #         counter += 1
-    # #     else:
-    # #         yCoords[counter+1] - yCoords[counter]
-    # #         yCoords[counter+1] = yCoords[counter+1] - sumDif /2
-    # #         counter +=1
-    #
-    # #print(xCoords[-1])
-    # #print(yCoords[-1])
+        else:
+            if point1x > point2x:
+                dif = point1x - point2x
+                newUserX = point1x - (dif/2)
+            else:
+                dif = point2x - point1x
+                newUserX = point2x - (dif/2)
 
+    # calculate new y
+    if len(pointList) > 2:
+        if point2y > point3y:
+            dif = point2y - point3y
+            newUserY = point2y - (dif/2)
+        else:
+            dif = point3y - point2y
+            newUserY = point3y - (dif/2)
+
+    if len(pointList) > 1:
+        if newUserY > 0:
+            if newUserY > point1y:
+                dif = newUserY - point1y
+                newUserY = newUserY - (dif/2)
+            else:
+                dif = point1y - newUserY
+                newUserY = point1y - (dif/2)
+
+        else:
+            if point1y > point2y:
+                dif = point1y - point2y
+                newUserY = point1y - (dif/2)
+            else:
+                dif = point2y - point1y
+                newUserY = point2y - (dif/2)
+
+    print('new user coords: x{}, y{}'.format(newUserX, newUserY))
 
     ovalSize = 4
     nodeLoc = [
-        [(xCoords[-1])-ovalSize, (yCoords[-1])-ovalSize],
-        [(xCoords[-1])+ovalSize, (yCoords[-1])+ovalSize]
+        [newUserX-ovalSize, newUserY-ovalSize],
+        [newUserX+ovalSize, newUserY+ovalSize]
     ]
-    #print(nodeLoc)
     canvas.coords(user, nodeLoc[0][0], nodeLoc[0][1], nodeLoc[1][0], nodeLoc[1][1])
 
 
