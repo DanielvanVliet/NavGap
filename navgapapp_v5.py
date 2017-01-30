@@ -236,7 +236,7 @@ def updateUser(canvas, user, points):
         if len(pointList) > 2:
             point3x, point3y = spotDict[sortedPointList[2][0]][2], spotDict[sortedPointList[2][0]][3]
 
-    nUserX, newUserY = 0, 0
+    newUserX, newUserY = 0, 0
 
     print(pointList)
     print(sortedPointList[0][0])
@@ -265,8 +265,6 @@ def updateUser(canvas, user, points):
             else:
                 dif = point1x - newUserX
                 newUserX = point1x - (dif/2)
-
-
         else:
             if point1x > point2x:
                 dif = point1x - point2x
