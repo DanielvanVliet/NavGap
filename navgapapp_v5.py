@@ -263,8 +263,7 @@ def updateUser(canvas, user, points):
             else:
                 dif = point3x - point2x
                 newUserX = point3x - (dif/2)
-
-        if len(pointList) > 1:
+        elif len(pointList) > 1:
             if newUserX > 0:
                 if newUserX > point1x:
                     dif = newUserX - point1x
@@ -281,6 +280,11 @@ def updateUser(canvas, user, points):
                 else:
                     dif = point2x - point1x
                     newUserX = point2x - (dif/2)
+        else:
+            if point1x > 0:
+                newUserX = point1x
+            else:
+                newUserX = 50
 
         # calculate new y
         if len(pointList) > 2:
@@ -290,8 +294,7 @@ def updateUser(canvas, user, points):
             else:
                 dif = point3y - point2y
                 newUserY = point3y - (dif/2)
-
-        if len(pointList) > 1:
+        elif len(pointList) > 1:
             if newUserY > 0:
                 if newUserY > point1y:
                     dif = newUserY - point1y
@@ -307,8 +310,13 @@ def updateUser(canvas, user, points):
                 else:
                     dif = point2y - point1y
                     newUserY = point2y - (dif/2)
+        else:
+            if point1y > 0:
+                newUserY = point1y
+            else:
+                newUserY = 50
 
-    print('new user coords: x{}, y{}'.format(newUserX, newUserY))
+    #print('new user coords: x{}, y{}'.format(newUserX, newUserY))
 
     ovalSize = 4
     nodeLoc = [
