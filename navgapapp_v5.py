@@ -6,8 +6,10 @@ import subprocess
 #import commands
 
 #graph = {'RPI_AP1':{'RPI_AP2':1, 'RPI_AP3':3, 'RPI_DB': 1},'RPI_AP2':{'RPI_AP1':1, 'RPI_AP4':2, 'RPI_DB':1}, 'RPI_AP3':{'RPI_AP1':3, 'RPI_AP4':10}, 'RPI_AP4': {'RPI_AP3':10, 'RPI_AP2':2}, 'RPI_DB': {'RPI_AP1':1, 'RPI_AP2':1}}   #imported from db
-start = input('Enter start location: ')
+#start = input('Enter start location: ')
 routeList = []
+
+End = ''
 
 #spotdict name : [connection, strength, loc X, loc Y], node gets appended behind it once the script starts
 spotDict = {
@@ -97,61 +99,61 @@ def updateList():
 
     trueCount = 0
     ## use this when testing on pi
-    # result = subprocess.getoutput(updateCmd)
-    # if len(result) > 0:
-    #     userList = []
-    #     for spot in spotDict:
-    #         row = 0
-    #         for line in result.split('\n'):
-    #             row += 1
-    #             essid = line[27:-1]
-    #             signal = line[49:51]
-    #             #print(essid)
-    #             #print(signal)
-    #             if row % 2 == 1:
-    #                 rowdata = signal
-    #                 #print(rowdata)
-    #             if essid == spot and int(rowdata) <= 70: # -75 = range limiter
-    #                 print('{} set to true, breaking for loop, current str: {}'.format(essid, rowdata))
-    #                 spotDict[spot][0] = True
-    #                 spotDict[spot][1] = rowdata
-    #                 userList.append(essid)
-    #                 break
-    #             else:
-    #                 if spotDict[spot][0] == True and essid == spot:
-    #                     print('{} set to false, last str: {}'.format(essid, rowdata))
-    #                 spotDict[spot][0] = False
-    #                 #print('{} set to false'.format(essid))
-    # print('user inbetween: {}'.format(userList))
-
-    ## this is for pc testing, rips info from old log
-    # if os.name == 'nt':
-    userList = []
-    for spot in spotDict:
-        #print(' | Connection: {:15}: {}, strength: {}'.format(spot, spotDict[spot][0], spotDict[spot][1]))
-        with open('log.csv', 'r') as file:
-            reader = csv.reader(file)
+    result = subprocess.getoutput(updateCmd)
+    if len(result) > 0:
+        userList = []
+        for spot in spotDict:
             row = 0
-            for line in reader:
+            for line in result.split('\n'):
                 row += 1
-                essid = line[0][27:-1]
-                signal = line[0][49:51]
-                #print(spot)
+                essid = line[27:-1]
+                signal = line[49:51]
                 #print(essid)
+                #print(signal)
                 if row % 2 == 1:
                     rowdata = signal
                     #print(rowdata)
-                if essid == spot and int(rowdata) <= 75: # range limiter
-                    if spotDict[spot][0] == False:
-                        #print('{} found, set to true'.format(essid))
-                        spotDict[spot][0] = True
-                        spotDict[spot][1] = rowdata
-                        userList.append(essid)
+                if essid == spot and int(rowdata) <= 70: # -75 = range limiter
+                    print('{} set to true, breaking for loop, current str: {}'.format(essid, rowdata))
+                    spotDict[spot][0] = True
+                    spotDict[spot][1] = rowdata
+                    userList.append(essid)
                     break
                 else:
+                    if spotDict[spot][0] == True and essid == spot:
+                        print('{} set to false, last str: {}'.format(essid, rowdata))
                     spotDict[spot][0] = False
                     #print('{} set to false'.format(essid))
     print('user inbetween: {}'.format(userList))
+
+    ## this is for pc testing, rips info from old log
+    # if os.name == 'nt':
+    # userList = []
+    # for spot in spotDict:
+    #     #print(' | Connection: {:15}: {}, strength: {}'.format(spot, spotDict[spot][0], spotDict[spot][1]))
+    #     with open('log.csv', 'r') as file:
+    #         reader = csv.reader(file)
+    #         row = 0
+    #         for line in reader:
+    #             row += 1
+    #             essid = line[0][27:-1]
+    #             signal = line[0][49:51]
+    #             #print(spot)
+    #             #print(essid)
+    #             if row % 2 == 1:
+    #                 rowdata = signal
+    #                 #print(rowdata)
+    #             if essid == spot and int(rowdata) <= 75: # range limiter
+    #                 if spotDict[spot][0] == False:
+    #                     #print('{} found, set to true'.format(essid))
+    #                     spotDict[spot][0] = True
+    #                     spotDict[spot][1] = rowdata
+    #                     userList.append(essid)
+    #                 break
+    #             else:
+    #                 spotDict[spot][0] = False
+    #                 #print('{} set to false'.format(essid))
+    # print('user inbetween: {}'.format(userList))
 
 
 
@@ -240,63 +242,71 @@ def updateUser(canvas, user, points):
     print(sortedPointList[0][0])
     print(spotDict[sortedPointList[0][0]][2])
     print()
+    global start
+    start = sorted(pointList, key=lambda point: point[1])[0][0]
 
     # A>B?
     # Bx - Ax = Dif
     # Bx - (dif/2) = newX
 
     # calculate new x
-    if len(pointList) > 2:
-        if point2x > point3x:
-            dif = point2x - point3x
-            newUserX = point2x - (dif/2)
-        else:
-            dif = point3x - point2x
-            newUserX = point3x - (dif/2)
 
-    if len(pointList) > 1:
-        if newUserX > 0:
-            if newUserX > point1x:
-                dif = newUserX - point1x
-                newUserX = newUserX - (dif/2)
-            else:
-                dif = point1x - newUserX
-                newUserX = point1x - (dif/2)
-
-
-        else:
-            if point1x > point2x:
-                dif = point1x - point2x
-                newUserX = point1x - (dif/2)
-            else:
-                dif = point2x - point1x
+    if sortedPointList[0][1] < 60:
+        newUserX, newUserY = point1x, point1y
+        if sortedPointList[0][0] == End:
+            resetRoute()
+    else:
+        if len(pointList) > 2:
+            if point2x > point3x:
+                dif = point2x - point3x
                 newUserX = point2x - (dif/2)
-
-    # calculate new y
-    if len(pointList) > 2:
-        if point2y > point3y:
-            dif = point2y - point3y
-            newUserY = point2y - (dif/2)
-        else:
-            dif = point3y - point2y
-            newUserY = point3y - (dif/2)
-
-    if len(pointList) > 1:
-        if newUserY > 0:
-            if newUserY > point1y:
-                dif = newUserY - point1y
-                newUserY = newUserY - (dif/2)
             else:
-                dif = point1y - newUserY
-                newUserY = point1y - (dif/2)
+                dif = point3x - point2x
+                newUserX = point3x - (dif/2)
 
-        else:
-            if point1y > point2y:
-                dif = point1y - point2y
-                newUserY = point1y - (dif/2)
+        if len(pointList) > 1:
+            if newUserX > 0:
+                if newUserX > point1x:
+                    dif = newUserX - point1x
+                    newUserX = newUserX - (dif/2)
+                else:
+                    dif = point1x - newUserX
+                    newUserX = point1x - (dif/2)
+
+
             else:
-                dif = point2y - point1y
+                if point1x > point2x:
+                    dif = point1x - point2x
+                    newUserX = point1x - (dif/2)
+                else:
+                    dif = point2x - point1x
+                    newUserX = point2x - (dif/2)
+
+        # calculate new y
+        if len(pointList) > 2:
+            if point2y > point3y:
+                dif = point2y - point3y
                 newUserY = point2y - (dif/2)
+            else:
+                dif = point3y - point2y
+                newUserY = point3y - (dif/2)
+
+        if len(pointList) > 1:
+            if newUserY > 0:
+                if newUserY > point1y:
+                    dif = newUserY - point1y
+                    newUserY = newUserY - (dif/2)
+                else:
+                    dif = point1y - newUserY
+                    newUserY = point1y - (dif/2)
+
+            else:
+                if point1y > point2y:
+                    dif = point1y - point2y
+                    newUserY = point1y - (dif/2)
+                else:
+                    dif = point2y - point1y
+                    newUserY = point2y - (dif/2)
 
     print('new user coords: x{}, y{}'.format(newUserX, newUserY))
 
@@ -354,6 +364,9 @@ def onObjectClick(event):
 
 ##### DIJKSTRA ALGORITHM #####
 def dijkstra(graph_dict, start, end):
+    global End
+    End = end
+
     print("Graph used: ",graph_dict)
     # create empty dictionary to hold the distance of each node to the start node
     distances = {}
@@ -419,8 +432,8 @@ def createUI():
     canvas.pack()
 
     background = canvas.create_image((WIDTH/2),(HEIGHT/2), image=bgImage)
-    #root.overrideredirect(True)
-    #root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
+    root.overrideredirect(True)
+    root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
 
     for con in connectDict:
         for link in connectDict[con]:
@@ -453,6 +466,7 @@ def createUI():
 while True:
     print('running on {}'.format(os.name)) # windows = nt, rpi = posix
     updateList()
+    start = 'RPI_AP1'
     print(spotDict)
     # text = input(' | null = update list \n | break = nuke app \n | start = start app \n >')
     # if text == 'break':
