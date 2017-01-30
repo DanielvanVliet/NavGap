@@ -104,9 +104,11 @@ def createOval(canvas, spotName, x, y):
         [(x+ovalSize), (y+ovalSize)]
     ]
     create = canvas.create_oval(nodeLoc[0][0], nodeLoc[0][1], nodeLoc[1][0], nodeLoc[1][1], fill=blue, activefill=red)
+    createLabel = canvas.create_text(x, (y+20), text=spotName)
     global spotDict
-    #nodeDict[nodeName] = [create, x, y]
-    spotDict[spotName].append([create, x, y])
+    spotDict[spotName].append([create, createLabel, x, y])
+
+#def createLabel(canvas, spotName, x, y)
 
 def createUser(canvas, x, y):
     ovalSize = 4
@@ -307,7 +309,7 @@ def createUI():
         updateNodes(canvas)
         #if endlocation is given somehow, run Dijkstra_Algorithm, path returned has to be given to routeLiner(canvas, path) and run ONCE
         global tempcounter
-        while tempcounter != 0:
+        if tempcounter != 0:
             routeLiner(canvas, ['RPI_AP3', 'RPI_AP2', 'Connectify-me']) #run this once
             tempcounter -=1
 
