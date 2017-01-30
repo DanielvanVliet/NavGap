@@ -229,12 +229,13 @@ def updateUser(canvas, user, points):
 
     sortedPointList = sorted(pointList, key=lambda point: point[1])
 
-    point1 = spotDict[sortedPointList[0][0]]
-    point1x, point1y = spotDict[sortedPointList[0][0]][2], spotDict[sortedPointList[0][0]][3]
-    if len(pointList) > 1:
-        point2x, point2y = spotDict[sortedPointList[1][0]][2], spotDict[sortedPointList[1][0]][3]
-        if len(pointList) > 2:
-            point3x, point3y = spotDict[sortedPointList[2][0]][2], spotDict[sortedPointList[2][0]][3]
+    if len(pointList) > 0:
+        point1 = spotDict[sortedPointList[0][0]]
+        point1x, point1y = spotDict[sortedPointList[0][0]][2], spotDict[sortedPointList[0][0]][3]
+        if len(pointList) > 1:
+            point2x, point2y = spotDict[sortedPointList[1][0]][2], spotDict[sortedPointList[1][0]][3]
+            if len(pointList) > 2:
+                point3x, point3y = spotDict[sortedPointList[2][0]][2], spotDict[sortedPointList[2][0]][3]
 
     newUserX, newUserY = 0, 0
 
