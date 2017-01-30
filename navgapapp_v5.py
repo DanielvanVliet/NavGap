@@ -250,11 +250,6 @@ def updateUser(canvas, user, points):
     # Bx - (dif/2) = newX
 
     # calculate new x
-
-    if sortedPointList[0][1] < 60:
-        newUserX, newUserY = point1x, point1y
-        if sortedPointList[0][0] == End:
-            resetRoute()
     else:
         if len(pointList) > 2:
             if point2x > point3x:
@@ -263,7 +258,7 @@ def updateUser(canvas, user, points):
             else:
                 dif = point3x - point2x
                 newUserX = point3x - (dif/2)
-        elif len(pointList) > 1:
+        if len(pointList) > 1:
             if newUserX > 0:
                 if newUserX > point1x:
                     dif = newUserX - point1x
@@ -294,7 +289,7 @@ def updateUser(canvas, user, points):
             else:
                 dif = point3y - point2y
                 newUserY = point3y - (dif/2)
-        elif len(pointList) > 1:
+        if len(pointList) > 1:
             if newUserY > 0:
                 if newUserY > point1y:
                     dif = newUserY - point1y
@@ -317,6 +312,10 @@ def updateUser(canvas, user, points):
                 newUserY = 50
 
     #print('new user coords: x{}, y{}'.format(newUserX, newUserY))
+    if sortedPointList[0][1] < 60:
+        newUserX, newUserY = point1x, point1y
+        if sortedPointList[0][0] == End:
+            resetRoute()
 
     ovalSize = 4
     nodeLoc = [
