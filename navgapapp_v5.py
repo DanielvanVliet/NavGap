@@ -458,7 +458,7 @@ def createUI():
     counter = 0
 
     while running:
-        if counter > 500:
+        if counter > 2:
             updateList()
             counter = -1
             time.sleep(0.1)
