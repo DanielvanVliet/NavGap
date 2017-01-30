@@ -7,26 +7,62 @@ import subprocess
 
 #spotdict name : [connection, strength, loc X, loc Y], node gets appended behind it once the script starts
 spotDict = {
-    'RPI_AP1' : [False, 0, 50, 50],
-    'RPI_AP2' : [False, 0, 150, 50],
-    'RPI_AP3' : [False, 0, 50, 150],
-    'RPI_AP4' : [False, 0, 150 , 150],
-    'RPI_DB' : [False, 0, 100, 100]
-}
-#
-# RPI1 RPI2, RPI_DB, RPI3
-# RPI3 RPI4 RPI1
-# RPI4 RPI3 RPI2
-# RPI2 RPI1 RPI4 RPI DB
-# RPI DB PRI1 RPI2
+    #primary pi's
+    'RPI_AP1' : [False, 0, 95, 80],
+    'RPI_AP2' : [False, 0, 170, 80],
+    'RPI_AP3' : [False, 0, 170, 160],
+    'RPI_AP4' : [False, 0, 95, 160],
+    'RPI_DB' : [False, 0, 130, 120],
 
-connectDict = {
-    'RPI_AP1' : ['RPI_AP2', 'RPI_DB', 'RPI_AP3'],
-    'RPI_AP2' : ['RPI_AP1', 'RPI_DB', 'RPI_AP4'],
-    'RPI_AP3' : ['RPI_AP4', 'RPI_AP1'],
-    'RPI_AP4' : ['RPI_AP3', 'RPI_AP2'],
-    'RPI_DB' : ['RPI_AP1', 'RPI_AP2']
+    #extention pi's
+    'RPI_AP5' : [False, 0, 130, 190],
+    'RPI_AP6' : [False, 0, 95, 225],
+    'RPI_AP7' : [False, 0, 170, 225],
+    'RPI_AP8' : [False, 0, 240 , 160],
+    'RPI_AP9' : [False, 0, 200, 120],
+    'RPI_AP10' : [False, 0, 240, 80],
+    'RPI_AP11' : [False, 0, 265, 120],
+    'RPI_AP12' : [False, 0, 295 , 160],
+    'RPI_AP13' : [False, 0, 295, 80],
+    'RPI_AP14' : [False, 0, 200, 60],
+    'RPI_AP15' : [False, 0, 225, 40],
+    'RPI_AP16' : [False, 0, 170 , 40],
+    'RPI_AP17' : [False, 0, 130, 60],
+    'RPI_AP18' : [False, 0, 95, 40]
 }
+e = 'RPI_AP'
+connectDict = {
+    #primary pi's
+    'RPI_AP1' : ['RPI_AP2', 'RPI_AP4', 'RPI_AP18', 'RPI_AP17'],
+    'RPI_AP2' : ['RPI_AP1', 'RPI_AP17', 'RPI_AP16', e+'14', e+'10', e+'9', e+'3', 'RPI_DB'],
+    'RPI_AP3' : [e+'7', e+'5', e+'4', 'RPI_DB', e+'2', e+'9', e+'8'],
+    'RPI_AP4' : [e+'3', e+'5', e+'6', e+'1'],
+    'RPI_DB' :  [e+'2', e+'17', e+'9', e+'3', e+'5'],
+
+    #extention pi's
+    'RPI_AP5' : [e+'6', e+'4', 'RPI_DB', e+'3', e+'7'],
+    'RPI_AP6' : [e+'4', e+'5', e+'7'],
+    'RPI_AP7' : [e+'6', e+'5', e+'3'],
+    'RPI_AP8' : [e+'3', e+'9', e+'10', e+'11', e+'12'],
+    'RPI_AP9' : ['RPI_DB', e+'2', e+'14', e+'10', e+'11', e+'8', e+'3'],
+    'RPI_AP10' : [e+'2', e+'14', e+'10', e+'13', e+'11', e+'9'],
+    'RPI_AP11' : [e+'9', e+'10', e+'13', e+'12', e+'8'],
+    'RPI_AP12' : [e+'8', e+'11', e+'13'],
+    'RPI_AP13' : [e+'10', e+'11', e+'12'],
+    'RPI_AP14' : [e+'17', e+'16', e+'15', e+'10', e+'9', e+'2'],
+    'RPI_AP15' : [e+'16', e+'10', e+'14'],
+    'RPI_AP16' : [e+'18', e+'15', e+'14', e+'2', e+'17'],
+    'RPI_AP17' : [e+'18', e+'16', e+'14', e+'2', 'RPI_DB', e+'1'],
+    'RPI_AP18' : [e+'1', e+'17', e+'16']
+}
+
+# connectDict = {
+#     'RPI_AP1' : ['RPI_AP2', 'RPI_DB', 'RPI_AP3'],
+#     'RPI_AP2' : ['RPI_AP1', 'RPI_DB', 'RPI_AP4'],
+#     'RPI_AP3' : ['RPI_AP4', 'RPI_AP1'],
+#     'RPI_AP4' : ['RPI_AP3', 'RPI_AP2'],
+#     'RPI_DB' : ['RPI_AP1', 'RPI_AP2']
+# }
 
 userList = []
 
@@ -105,7 +141,7 @@ green = '#3ADF00'
 running = False
 
 def createOval(canvas, spotName, x, y):
-    ovalSize = 8
+    ovalSize = 5
     print('creating {} (node) on {} at {}, {}'.format(spotName, canvas, x, y))
     nodeLoc = [
         [(x-ovalSize), (y-ovalSize)],
