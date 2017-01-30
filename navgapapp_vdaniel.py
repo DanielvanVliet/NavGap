@@ -2,6 +2,7 @@ import csv
 import os
 import time
 import tkinter
+from tkinter import Canvas, Frame, Button
 import subprocess
 #import commands
 
@@ -9,6 +10,10 @@ import subprocess
 routeList = []
 global tempcounter
 tempcounter = 1
+
+graph = {'RPI_AP1':{'RPI_AP2':1, 'RPI_AP3':3},'RPI_AP2':{'RPI_AP1':1, 'RPI_AP3':3}, 'RPI_AP3':{'RPI_AP1':3, 'RPI_AP2':3}}
+start = 'RPI_AP1'
+end = 'RPI_AP3'
 #spotdict name : [connection, strength, loc X, loc Y], node gets appended behind it once the script starts
 spotDict = {
     'RPI_AP2' : [False, 0, 50, 150],
@@ -97,6 +102,7 @@ green = '#3ADF00'
 running = False
 
 def createOval(canvas, spotName, x, y):
+    global spotDict
     ovalSize = 8
     print('creating {} (node) on {} at {}, {}'.format(spotName, canvas, x, y))
     nodeLoc = [
@@ -104,11 +110,15 @@ def createOval(canvas, spotName, x, y):
         [(x+ovalSize), (y+ovalSize)]
     ]
     create = canvas.create_oval(nodeLoc[0][0], nodeLoc[0][1], nodeLoc[1][0], nodeLoc[1][1], fill=blue, activefill=red)
+    canvas.bind('<ButtonPress-1>', onObjectClick)
     createLabel = canvas.create_text(x, (y+20), text=spotName)
-    global spotDict
     spotDict[spotName].append([create, createLabel, x, y])
 
-#def createLabel(canvas, spotName, x, y)
+
+
+def clicked():
+    # inside circle
+    print('hello')
 
 def createUser(canvas, x, y):
     ovalSize = 4
@@ -216,6 +226,14 @@ def updateNodes(canvas):
         else:
             changeNodeColor(canvas, each, blue)
 
+def onObjectClick(event):
+    print('Got object click', event.x, event.y)
+    for each in spotDict:
+        #print('if {} == {}'.format(event.widget.find_closest(event.x, event.y)[0], spotDict[each][4][0]))
+        if int(event.widget.find_closest(event.x, event.y)[0]) == int(spotDict[each][4][0]):
+            print("closest: " + str(each))
+
+
 ##### DIJKSTRA ALGORITHM #####
 def dijkstra(graph_dict, start, end):
     print("Graph used: ",graph_dict)
@@ -292,13 +310,13 @@ def createUI():
     for each in spotDict:
         print(each)
         createOval(canvas, each, spotDict[each][2], spotDict[each][3])
-
+    print(spotDict)
     exit = tkinter.Button(text='exit', command=lambda :stopApp(root))
     exit_place = canvas.create_window(20, 30, window=exit)
 
     createUser(canvas, WIDTH/2, HEIGHT/2)
     counter = 0
-
+    global graph, start, end
     while running:
         if counter > 500:
             updateList()
@@ -307,10 +325,11 @@ def createUI():
             updateUser(canvas,user, userList)
 
         updateNodes(canvas)
-        #if endlocation is given somehow, run Dijkstra_Algorithm, path returned has to be given to routeLiner(canvas, path) and run ONCE
+        #if endlocation is selected, run Dijkstra_Algorithm, the path returned has to be given to routeLiner(canvas, path) and run ONCE
+
         global tempcounter
         if tempcounter != 0:
-            routeLiner(canvas, ['RPI_AP3', 'RPI_AP2', 'Connectify-me']) #run this once
+            routeLiner(canvas, dijkstra(graph, start, end)) #run this once
             tempcounter -=1
 
         root.update_idletasks()
