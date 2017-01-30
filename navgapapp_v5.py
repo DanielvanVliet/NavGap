@@ -237,90 +237,90 @@ def updateUser(canvas, user, points):
             if len(pointList) > 2:
                 point3x, point3y = spotDict[sortedPointList[2][0]][2], spotDict[sortedPointList[2][0]][3]
 
-    newUserX, newUserY = 0, 0
+        newUserX, newUserY = 0, 0
 
-    print(pointList)
-    print(sortedPointList[0][0])
-    print(spotDict[sortedPointList[0][0]][2])
-    print()
-    global start
-    start = sorted(pointList, key=lambda point: point[1])[0][0]
+        print(pointList)
+        print(sortedPointList[0][0])
+        print(spotDict[sortedPointList[0][0]][2])
+        print()
+        global start
+        start = sorted(pointList, key=lambda point: point[1])[0][0]
 
-    # A>B?
-    # Bx - Ax = Dif
-    # Bx - (dif/2) = newX
+        # A>B?
+        # Bx - Ax = Dif
+        # Bx - (dif/2) = newX
 
-    # calculate new x
-    if len(pointList) > 2:
-        if point2x > point3x:
-            dif = point2x - point3x
-            newUserX = point2x - (dif/2)
-        else:
-            dif = point3x - point2x
-            newUserX = point3x - (dif/2)
-    if len(pointList) > 1:
-        if newUserX > 0:
-            if newUserX > point1x:
-                dif = newUserX - point1x
-                newUserX = newUserX - (dif/2)
-            else:
-                dif = point1x - newUserX
-                newUserX = point1x - (dif/2)
-        else:
-            if point1x > point2x:
-                dif = point1x - point2x
-                newUserX = point1x - (dif/2)
-            else:
-                dif = point2x - point1x
+        # calculate new x
+        if len(pointList) > 2:
+            if point2x > point3x:
+                dif = point2x - point3x
                 newUserX = point2x - (dif/2)
-    else:
-        if point1x > 0:
-            newUserX = point1x
-        else:
-            newUserX = 50
-
-    # calculate new y
-    if len(pointList) > 2:
-        if point2y > point3y:
-            dif = point2y - point3y
-            newUserY = point2y - (dif/2)
-        else:
-            dif = point3y - point2y
-            newUserY = point3y - (dif/2)
-    if len(pointList) > 1:
-        if newUserY > 0:
-            if newUserY > point1y:
-                dif = newUserY - point1y
-                newUserY = newUserY - (dif/2)
             else:
-                dif = point1y - newUserY
-                newUserY = point1y - (dif/2)
-
-        else:
-            if point1y > point2y:
-                dif = point1y - point2y
-                newUserY = point1y - (dif/2)
+                dif = point3x - point2x
+                newUserX = point3x - (dif/2)
+        if len(pointList) > 1:
+            if newUserX > 0:
+                if newUserX > point1x:
+                    dif = newUserX - point1x
+                    newUserX = newUserX - (dif/2)
+                else:
+                    dif = point1x - newUserX
+                    newUserX = point1x - (dif/2)
             else:
-                dif = point2y - point1y
+                if point1x > point2x:
+                    dif = point1x - point2x
+                    newUserX = point1x - (dif/2)
+                else:
+                    dif = point2x - point1x
+                    newUserX = point2x - (dif/2)
+        else:
+            if point1x > 0:
+                newUserX = point1x
+            else:
+                newUserX = 50
+
+        # calculate new y
+        if len(pointList) > 2:
+            if point2y > point3y:
+                dif = point2y - point3y
                 newUserY = point2y - (dif/2)
-    else:
-        if point1y > 0:
-            newUserY = point1y
+            else:
+                dif = point3y - point2y
+                newUserY = point3y - (dif/2)
+        if len(pointList) > 1:
+            if newUserY > 0:
+                if newUserY > point1y:
+                    dif = newUserY - point1y
+                    newUserY = newUserY - (dif/2)
+                else:
+                    dif = point1y - newUserY
+                    newUserY = point1y - (dif/2)
+
+            else:
+                if point1y > point2y:
+                    dif = point1y - point2y
+                    newUserY = point1y - (dif/2)
+                else:
+                    dif = point2y - point1y
+                    newUserY = point2y - (dif/2)
         else:
-            newUserY = 50
+            if point1y > 0:
+                newUserY = point1y
+            else:
+                newUserY = 50
 
-    #print('new user coords: x{}, y{}'.format(newUserX, newUserY))
-    if sortedPointList[0][1] < 60:
-        newUserX, newUserY = point1x, point1y
-        if sortedPointList[0][0] == End:
-            resetRoute()
+        #print('new user coords: x{}, y{}'.format(newUserX, newUserY))
+        if sortedPointList[0][1] < 60:
+            newUserX, newUserY = point1x, point1y
+            if sortedPointList[0][0] == End:
+                resetRoute()
 
-    ovalSize = 4
-    nodeLoc = [
-        [newUserX-ovalSize, newUserY-ovalSize],
-        [newUserX+ovalSize, newUserY+ovalSize]
-    ]
-    canvas.coords(user, nodeLoc[0][0], nodeLoc[0][1], nodeLoc[1][0], nodeLoc[1][1])
+        ovalSize = 4
+        nodeLoc = [
+            [newUserX-ovalSize, newUserY-ovalSize],
+            [newUserX+ovalSize, newUserY+ovalSize]
+        ]
+        canvas.coords(user, nodeLoc[0][0], nodeLoc[0][1], nodeLoc[1][0], nodeLoc[1][1])
 
 
     #canvas.coords(user, xCoords[-1], yCoords[-1])
