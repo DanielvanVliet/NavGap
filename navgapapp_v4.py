@@ -1,3 +1,7 @@
+### Navgap App ver. 4
+## Extended the grid locations further based on our target location. (pseudo)Triangulation now also places the user
+## near the closest point and is limited to the 3 strongest connections.
+# Written by Michel Baartman & Daniel van Vliet
 import csv
 import os
 import time

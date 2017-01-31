@@ -1,3 +1,8 @@
+### Navgap App ver. 3
+## Grid feature extended with more nodes and now showcasing names, now also calculates user position in between points.
+## Also features a new way of recording current connections to the device by directly asking the OS instead of
+## recording it in a list through a bash script.
+# Written by Michel Baartman & Daniel van Vliet
 import csv
 import os
 import time

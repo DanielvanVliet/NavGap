@@ -1,3 +1,7 @@
+### Navgap App ver. 0
+## Simple navigation between 3 points, hardcoded.
+# Written by Michel Baartman & Daniel van Vliet
+
 import sys
 print(sys.version)
 print()

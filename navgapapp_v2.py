@@ -1,3 +1,6 @@
+### Navgap App ver. 2
+## Using ESSIDs to determine location of user and showing this on the newly added grid feature.
+# Written by Michel Baartman & Daniel van Vliet
 import csv
 import os
 import time

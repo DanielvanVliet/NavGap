@@ -1,3 +1,6 @@
+### Navgap App ver. 1
+## Reading ESSIDs from OS for user position, first node creation
+# Written by Michel Baartman & Daniel van Vliet
 import csv
 import os
 import time
