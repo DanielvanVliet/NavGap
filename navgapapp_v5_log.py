@@ -2,11 +2,15 @@ import csv
 import os
 import time
 import tkinter
+import datetime
 import subprocess
 #import commands
 
-with open('log2.csv', 'w') as file:
-    file.close()
+def createLog():
+    logName = 'NGAPP_LOG_' + time.strftime("%d%m%y")+ '.txt'
+    print(logName)
+    with open(logName, 'w') as file:
+        file.close()
 
 #graph = {'RPI_AP1':{'RPI_AP2':1, 'RPI_AP3':3, 'RPI_DB': 1},'RPI_AP2':{'RPI_AP1':1, 'RPI_AP4':2, 'RPI_DB':1}, 'RPI_AP3':{'RPI_AP1':3, 'RPI_AP4':10}, 'RPI_AP4': {'RPI_AP3':10, 'RPI_AP2':2}, 'RPI_DB': {'RPI_AP1':1, 'RPI_AP2':1}}   #imported from db
 start = 'RPI_AP8'
@@ -95,7 +99,7 @@ userList = []
 def updateList():
     global spotDict
     global userList
-    appendLog('# update connection list #')
+    appendLog('# update connection list #', updateList.__name__)
     updateCmd = 'sudo iwlist wlan0 scan |grep -e Signal -e ESSID'
 
     trueCount = 0
@@ -165,6 +169,16 @@ red = '#FF0000'
 green = '#3ADF00'
 running = False
 
+try:
+    logName = 'NGAPP_LOG_' + time.strftime("%d%m%y") + '.txt'
+    print(logName)
+    with open(logName, 'a') as file:
+        file.close()
+except:
+    print("Can't find {}, creating new log".format(logName))
+    createLog()
+
+
 def createOval(canvas, spotName, x, y):
     ovalSize = 8
     print('creating {} (node) on {} at {}, {}'.format(spotName, canvas, x, y))
@@ -212,7 +226,7 @@ def createRoute(point1, point2, color):
 
 def routeLiner(path):
     global canvas
-    appendLog("Lining Path")
+    appendLog("Creating Path", routeLiner.__name__)
     print(path)
     counter = 0
     for each in path:
@@ -317,7 +331,7 @@ def changeNodeColor(canvas, spotName, color):
     canvas.itemconfig(spotDict[spotName][-1][0], fill=color)
 
 def stopApp(tkroot):
-    appendLog('killing root')
+    appendLog('Killing root', stopApp.__name__)
     running = False
     tkroot.destroy()
     tkroot.quit()
@@ -343,18 +357,19 @@ def onObjectClick(event):
     resetRoute()
     for each in spotDict:
         if int(event.widget.find_closest(event.x, event.y)[0]) == int(spotDict[each][4][0]):
-            appendLog("Selected end node: " + str(each))
+            appendLog("Selected end node: " + str(each), onObjectClick.__name__)
             global end
             end = each
-    appendLog("Starting node: {} ending node: {}".format(start, end))
+    appendLog("Starting node: {} ending node: {}".format(start, end), onObjectClick.__name__)
     routeLiner(dijkstra(graph, start, end))
     # print('routelist voor {}'.format(routeList))
     # resetRoute()
     # print('routelist na {}'.format(routeList))
 
-def appendLog(string):
-    with open('log2.csv', 'a') as file:
-        file.write(string + '\n')
+def appendLog(string, function):
+    logName = 'NGAPP_LOG_' + time.strftime("%d%m%y") + '.txt'
+    with open(logName, 'a') as file:
+        file.write(time.strftime('%I:%M:%S')+'-[{}] {}\n'.format(function, string))
         file.close()
 
 ##### DIJKSTRA ALGORITHM #####
