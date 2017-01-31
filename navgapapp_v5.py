@@ -164,6 +164,24 @@ red = '#FF0000'
 green = '#3ADF00'
 running = False
 
+## GUI ##
+blue = '#08088A'
+yellow = '#FFFF00'
+red = '#FF0000'
+green = '#3ADF00'
+running = False
+
+#Check whether there is a log for today
+try:
+    logName = 'NGAPP_LOG_' + time.strftime("%d%m%y") + '.txt'
+    print(logName)
+    with open(logName, 'a') as file:
+        file.close()
+#If there is no log for today, create new log
+except:
+    print("Can't find {}, creating new log".format(logName))
+    createLog()
+
 def createOval(canvas, spotName, x, y):
     ovalSize = 8
     print('creating {} (node) on {} at {}, {}'.format(spotName, canvas, x, y))
@@ -360,12 +378,23 @@ def onObjectClick(event):
             print("closest: " + str(each))
             global end
             end = each
-    print("start {}, end {}".format(start, end))
+    appendLog("start {}, end {}".format(start, end), appendLog.__name__)
     routeLiner(dijkstra(graph, start, end))
     # print('routelist voor {}'.format(routeList))
     # resetRoute()
     # print('routelist na {}'.format(routeList))
 
+def createLog():
+    logName = 'NGAPP_LOG_' + time.strftime("%d%m%y")+ '.txt'
+    print(logName)
+    with open(logName, 'w') as file:
+        file.close()
+
+def appendLog(string, function):
+    logName = 'NGAPP_LOG_' + time.strftime("%d%m%y") + '.txt'
+    with open(logName, 'a') as file:
+        file.write(time.strftime('%I:%M:%S')+'-[{}] {}\n'.format(function, string))
+        file.close()
 
 ##### DIJKSTRA ALGORITHM #####
 def dijkstra(graph_dict, start, end):
