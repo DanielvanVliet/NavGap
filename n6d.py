@@ -93,28 +93,9 @@ userList = []
 
 ## updates the list of connections ##
 def updateList():
-    """
-    Summary:
-    Grabs wlan information of OS (or uses the predefined log.csv to mimic grabbing the information) then changes
-    the state of predefined True or False statements within the spotDict dictionairy.
-    Also clears then appends the current connections of the user into a list named userList.
-
-    parameters
-    spotDict : dictionary
-    Contains a predefined set of names of wifi beacons and statistics in the following manner:
-    ESSIDNAME, Connection State, Connection Strength, xPosition of node on the map, yPosition of node on the map
-
-    userList : list
-    Contains current locations to which the user is connected. refreshed each time updateList() is called.
-    Influences user location in updateUser(canvas, user, points)
-
-    :return:
-    Changes connection states and strengths within spotDict and appends locations the user is currently connected to in
-    userList.
-    """
-
     global spotDict
     global userList
+    #appendLog("# updating list", updateList.__name__)
     updateCmd = 'sudo iwlist wlan0 scan |grep -e Signal -e ESSID'
 
     trueCount = 0
@@ -187,27 +168,6 @@ running = False
 
 
 def createOval(canvas, spotName, x, y):
-    """
-    Summary:
-    Creates an oval based on the X and Y parameters and appends it to the specified spotDict entry based on the
-    spotName. The spotName is usually a name accociated with an ESSID
-
-    :param canvas:
-    tkinter canvas on which the oval is placed.
-
-    :param spotName:
-    spotDict entry to which the oval will be appended. Usually accociated with an ESSID.
-
-    :param x:
-    x coordinates of the oval.
-
-    :param y:
-    y coordinates of the oval.
-
-    :return:
-    Appends a oval to the end of a spotDict entry.
-    """
-
     ovalSize = 8
     appendLog("creating node @ {}x, {}y".format(x, y), createOval.__name__)
     #print('creating {} (node) on {} at {}, {}'.format(spotName, canvas, x, y))
@@ -224,22 +184,6 @@ def createOval(canvas, spotName, x, y):
     canvas.bind('<ButtonPress-1>', onObjectClick)
 
 def createUser(canvas, x, y):
-    """
-    Summary:
-    Creates the initial oval which will represent the user.
-
-    :param canvas:
-    The canvas on which the user oval will be created.
-
-    :param x:
-    The x coordinates of the initial user oval.
-
-    :param y:
-    the y coordinates of the initial user oval.
-
-    :return:
-    A oval representing the user at the given coordinates.
-    """
     appendLog("creating user @ {}x, {}y".format(x, y), createUser.__name__)
     ovalSize = 4
     #print('creating (solo node) at {}, {}'.format(x, y))
@@ -251,23 +195,7 @@ def createUser(canvas, x, y):
     user = canvas.create_oval(nodeLoc[0][0], nodeLoc[0][1], nodeLoc[1][0], nodeLoc[1][1], fill=green, activefill=red)
 
 def createConnection(canvas, point1, point2):
-    """
-    Summary:
-    Creates a black tkinter line between point1 and point2. point1 and point2 are NOT x and y coordinates, but entries
-    in the spotDict dictionary.
-
-    :param canvas:
-    The tkinter canvas on which the line will be created.
-
-    :param point1:
-    Starting point of the line. This is usually a string name based on entries in the spotDict.
-
-    :param point2:
-    Ending point of the line. This is usually a string name based on entries in the spotDict.
-
-    :return:
-    A black line between point1 and point2.
-    """
+    # (x1, y1, x2, y2)
     appendLog("creating connection between '{}' {}x, {}y and '{}' {}x, {}y".format(point1,
                                                                                spotDict[point1][2], spotDict[point1][3],
                                                                                point2,
@@ -279,23 +207,6 @@ def createConnection(canvas, point1, point2):
     canvas.create_line(spotDict[point1][2], spotDict[point1][3], spotDict[point2][2], spotDict[point2][3])
 
 def createRoute(point1, point2, color):
-    """
-    Summary:
-    Creates a defined(color) tkinter line with an arrowhead from point1 to point2.
-    point1 and point2 are NOT x and y coordinates, but entries in the spotDict dictionary.
-
-    :param point1:
-    Starting point of the line. This is usually a string name based on entries in the spotDict.
-
-    :param point2:
-    Ending point of the line. This is usually a string name based on entries in the spotDict.
-
-    :param color:
-    Color of the tkinter line that will be made.
-
-    :return:
-    A tkinter arrowheaded line between point1 and point2 with the specified color.
-    """
     global canvas
     # (x1, y1, x2, y2)
     appendLog("creating Dijkstra between '{}' {}x, {}y and '{}' {}x, {}y".format(point1,
@@ -308,16 +219,6 @@ def createRoute(point1, point2, color):
     print(routeList)
 
 def routeLiner(path):
-    """
-    Summary:
-    Specifies what route must be created. then calls the createRoute function to create the route.
-
-    :param path:
-    A list of strings based on entries in the spotDict dictionary.
-
-    :return:
-    A list (routeList) that the createRoute will use.
-    """
     global canvas
     #print("Lining Path")
     appendLog("# lining path".format(), routeLiner.__name__)
@@ -333,31 +234,6 @@ def routeLiner(path):
 
 
 def updateUser(canvas, user, points):
-    """
-    Summary:
-    Updates the user oval's location based on the points which the user is connected to.
-    The formula(9 point center: http://mathworld.wolfram.com/Nine-PointCenter.html) for
-    determenating the new location goes as followed:
-
-    is A>B?
-        A - B = Dif
-        SUM = A - Dif/2
-    else
-        B - A = Dif
-        SUM = B - Dif/2
-
-    :param canvas:
-    The canvas on which the oval is present.
-
-    :param user:
-    The oval (in most cases the user) that will have its coordinates changed.
-
-    :param points:
-    A list of points the user is currently connected to. The userList list is usually used for this.
-
-    :return:
-    Changes the position of the oval on the map.
-    """
     pointList = []
     for each in points:
         pointList.append([each, int(spotDict[each][1])])
@@ -464,20 +340,6 @@ def updateUser(canvas, user, points):
     #canvas.coords(user, xCoords[-1], yCoords[-1])
 
 def changeNodeColor(canvas, spotName, color):
-    """
-    Summary:
-    Changes the oval fill color.
-
-    :param canvas:
-    The canvas on which the oval is present.
-
-    :param spotName:
-    Name of the spot that is tied to the oval.
-
-    :param color:
-    Color that the oval fill will be changed to.
-    :return:
-    """
     canvas.itemconfig(spotDict[spotName][-1][0], fill=color)
 
 def stopApp(tkroot):
@@ -645,28 +507,6 @@ def dijkstra(graph_dict, start, end):
 
 ##### UI LOOP #####
 def createUI():
-    """
-    Sets up a tkinter interface that will be used to visualize the information within the application.
-    The following sets are taken before the UI loop will run.
-    - creates a tkinter root and canvas to place graphics upon.
-    - Set the background of the canvas to 'background.gif'
-    - Overwrites the root geometry to make the app fullscreen. The canvas is still limited to the specified
-    WIDTH and HEIGHT.
-    - Creates connections between locations in spotDict.
-    - Creates ovals on locations in spotDict.
-    - Sets up a exit button on the canvas.
-    - Creates the initial user oval.
-    - Sets running to True
-
-    While running = True the loop calls the following functions:
-    - updateUser(canvas,user, userList) : Update the user oval coordinates based on connected locations.
-    - updateNodes(canvas) : Update wether the nodes on the canvas are connected to the user or not.
-    - root.update_idletasks() : Manual tkinter root updates.
-    - root.update() : Manual tkinter root updates.
-
-    :return:
-    Sets up the interface and creates a update loop.
-    """
     running = True
     WIDTH, HEIGHT = 420, 300
     root = tkinter.Tk()
