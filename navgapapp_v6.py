@@ -52,12 +52,12 @@ connectDict = {
     'RPI_AP7' : [e+'6', e+'5', e+'3'],
     'RPI_AP8' : [e+'3', e+'9', e+'10', e+'11', e+'12'],
     'RPI_AP9' : ['RPI_DB', e+'2', e+'14', e+'10', e+'11', e+'8', e+'3'],
-    'RPI_AP10' : [e+'2', e+'14', e+'10', e+'13', e+'11', e+'9'],
+    'RPI_AP10' : [e+'2', e+'14', e+'10', e+'13', e+'11', e+'9', e+'8'],
     'RPI_AP11' : [e+'9', e+'10', e+'13', e+'12', e+'8'],
     'RPI_AP12' : [e+'8', e+'11', e+'13'],
     'RPI_AP13' : [e+'10', e+'11', e+'12'],
     'RPI_AP14' : [e+'17', e+'16', e+'15', e+'10', e+'9', e+'2'],
-    'RPI_AP15' : [e+'16', e+'10', e+'14'],
+    'RPI_AP15' : [e+'16', e+'14'],
     'RPI_AP16' : [e+'18', e+'15', e+'14', e+'2', e+'17'],
     'RPI_AP17' : [e+'18', e+'16', e+'14', e+'2', 'RPI_DB', e+'1'],
     'RPI_AP18' : [e+'1', e+'17', e+'16']
@@ -66,27 +66,27 @@ connectDict = {
 #graph = {'RPI_AP1':{'RPI_AP2':1, 'RPI_AP3':3, 'RPI_DB': 1}}
 graph = {
     #primary pi's
-    'RPI_AP1' : {'RPI_AP2':1, 'RPI_AP4':1, 'RPI_AP18':1, 'RPI_AP17':1},
-    'RPI_AP2' : {'RPI_AP1':1, 'RPI_AP17':1, 'RPI_AP16':1, e+'14':1, e+'10':1, e+'9':1, e+'3':1, 'RPI_DB':1},
-    'RPI_AP3' : {e+'7':1, e+'5':1, e+'4':1, 'RPI_DB':1, e+'2':1, e+'9':1, e+'8':1},
-    'RPI_AP4' : {e+'3':1, e+'5':1, e+'6':1, e+'1':1},
-    'RPI_DB' :  {e+'2':1, e+'17':1, e+'9':1, e+'3':1, e+'5':1},
+    'RPI_AP1' : {'RPI_AP2':1, 'RPI_AP4':1, 'RPI_AP18':1, 'RPI_AP17':0.75},
+    'RPI_AP2' : {'RPI_AP1':1, 'RPI_AP17':0.75, 'RPI_AP16':1, e+'14':0.75, e+'10':1, e+'9':0.75, e+'3':1, 'RPI_DB':0.75},
+    'RPI_AP3' : {e+'7':1, e+'5':0.75, e+'4':1, 'RPI_DB':0.75, e+'2':1, e+'9':0.75, e+'8':1},
+    'RPI_AP4' : {e+'3':1, e+'5':0.75, e+'6':1, e+'1':1},
+    'RPI_DB' :  {e+'2':0.75, e+'17':1, e+'9':1, e+'3':0.75, e+'5':1},
 
     #extention pi's
-    'RPI_AP5' : {e+'6':1, e+'4':1, 'RPI_DB':1, e+'3':1, e+'7':1},
-    'RPI_AP6' : {e+'4':1, e+'5':1, e+'7':1},
-    'RPI_AP7' : {e+'6':1, e+'5':1, e+'3':1},
-    'RPI_AP8' : {e+'3':1, e+'9':1, e+'10':1, e+'11':1, e+'12':1},
-    'RPI_AP9' : {'RPI_DB':1, e+'2':1, e+'14':1, e+'10':1, e+'11':1, e+'8':1, e+'3':1},
-    'RPI_AP10' : {e+'2':1, e+'14':1, e+'10':1, e+'13':1, e+'11':1, e+'9':1},
-    'RPI_AP11' : {e+'9':1, e+'10':1, e+'13':1, e+'12':1, e+'8':1},
-    'RPI_AP12' : {e+'8':1, e+'11':1, e+'13':1},
-    'RPI_AP13' : {e+'10':1, e+'11':1, e+'12':1},
-    'RPI_AP14' : {e+'17':1, e+'16':1, e+'15':1, e+'10':1, e+'9':1, e+'2':1},
-    'RPI_AP15' : {e+'16':1, e+'10':1, e+'14':1},
-    'RPI_AP16' : {e+'18':1, e+'15':1, e+'14':1, e+'2':1, e+'17':1},
-    'RPI_AP17' : {e+'18':1, e+'16':1, e+'14':1, e+'2':1, 'RPI_DB':1, e+'1':1},
-    'RPI_AP18' : {e+'1':1, e+'17':1, e+'16':1}
+    'RPI_AP5' : {e+'6':0.75, e+'4':0.75, 'RPI_DB':1, e+'3':0.75, e+'7':0.75},
+    'RPI_AP6' : {e+'4':1, e+'5':0.75, e+'7':1},
+    'RPI_AP7' : {e+'6':1, e+'5':0.75, e+'3':1},
+    'RPI_AP8' : {e+'3':1, e+'9':0.75, e+'10':1, e+'11':0.75, e+'12':1},
+    'RPI_AP9' : {'RPI_DB':1, e+'2':0.75, e+'14':1, e+'10':0.75, e+'11':1, e+'8':0.75, e+'3':0.75},
+    'RPI_AP10' : {e+'2':1, e+'14':0.75, e+'10':1, e+'13':1, e+'11':0.75, e+'9':0.75,e+'8':1},
+    'RPI_AP11' : {e+'9':1, e+'10':0.75, e+'13':0.75, e+'12':0.75, e+'8':0.75},
+    'RPI_AP12' : {e+'8':1, e+'11':0.75, e+'13':1},
+    'RPI_AP13' : {e+'10':1, e+'11':0.75, e+'12':1},
+    'RPI_AP14' : {e+'17':1, e+'16':0.75, e+'15':0.75, e+'10':0.75, e+'9':1, e+'2':0.75},
+    'RPI_AP15' : {e+'16':1, e+'14':0.75},
+    'RPI_AP16' : {e+'18':1, e+'15':1, e+'14':0.75, e+'2':1, e+'17':1},
+    'RPI_AP17' : {e+'18':0.75, e+'16':0.75, e+'14':1, e+'2':0.75, 'RPI_DB':1, e+'1':0.75},
+    'RPI_AP18' : {e+'1':1, e+'17':0.75, e+'16':1}
 }
 
 userList = []
@@ -305,7 +305,7 @@ def createRoute(point1, point2, color):
     line = canvas.create_line(spotDict[point1][2], spotDict[point1][3], spotDict[point2][2], spotDict[point2][3], fill=yellow, arrow=tkinter.LAST, arrowshape=[10,10,5], width=3)
     global routeList
     routeList.append(line)
-    print(routeList)
+    #print(routeList)
 
 def routeLiner(path):
     """
@@ -322,7 +322,7 @@ def routeLiner(path):
     #print("Lining Path")
     appendLog("# lining path".format(), routeLiner.__name__)
 
-    print(path)
+    #print(path)
     counter = 0
     for each in path:
         if counter < len(path)-1:
@@ -375,10 +375,10 @@ def updateUser(canvas, user, points):
 
         newUserX, newUserY = 0, 0
 
-        print(pointList)
-        print(sortedPointList[0][0])
-        print(spotDict[sortedPointList[0][0]][2])
-        print()
+        #print(pointList)
+        #print(sortedPointList[0][0])
+        #print(spotDict[sortedPointList[0][0]][2])
+        #print()
         global start
         start = sorted(pointList, key=lambda point: point[1])[0][0]
 
@@ -718,7 +718,7 @@ while True:
     appendLog("## running on {}".format(os.name), '')
     updateList()
     start = 'RPI_DB'
-    print(spotDict)
+    #print(spotDict)
     # text = input(' | null = update list \n | break = nuke app \n | start = start app \n >')
     # if text == 'break':
     #     break
