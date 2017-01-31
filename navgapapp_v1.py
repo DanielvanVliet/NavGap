@@ -26,31 +26,31 @@ def updateList():
     print('# update list #')
     os.system(updateCmd)
 
-    # for spot in spotDict:
-    #     with open('log.csv', 'r') as file:
-    #         reader = csv.reader(file)
-    #         row = 0
-    #         print('##checking spot##')
-    #         print(spot)
-    #         for line in reader:
-    #             #print(line)
-    #             row += 1
-    #             #print(spot)
-    #             #print(line[0][27:-1])
-    #             if row % 2 == 1:
-    #                 rowdata = line[0][48:51]
-    #                 #print(rowdata)
-    #             elif spot == line[0][27:-1]:
-    #                 print('####################')
-    #                 print('{} == {}'.format(line[0][27:-1], spot))
-    #                 #print(line[0][27:-1])
-    #                 spotDict[line[0][27:-1]][0] = True
-    #                 spotDict[line[0][27:-1]][1] = rowdata
-    #                 print(spot, 'set to true, breaking for-loop')
-    #                 break
-    #             elif line[0][27:-1] in spotDict:
-    #                 print('set to false')
-    #                 spotDict[line[0][27:-1]][0] = False
+    for spot in spotDict:
+        with open('log.csv', 'r') as file:
+            reader = csv.reader(file)
+            row = 0
+            print('##checking spot##')
+            print(spot)
+            for line in reader:
+                #print(line)
+                row += 1
+                #print(spot)
+                #print(line[0][27:-1])
+                if row % 2 == 1:
+                    rowdata = line[0][48:51]
+                    #print(rowdata)
+                elif spot == line[0][27:-1]:
+                    print('####################')
+                    print('{} == {}'.format(line[0][27:-1], spot))
+                    #print(line[0][27:-1])
+                    spotDict[line[0][27:-1]][0] = True
+                    spotDict[line[0][27:-1]][1] = rowdata
+                    print(spot, 'set to true, breaking for-loop')
+                    break
+                elif line[0][27:-1] in spotDict:
+                    print('set to false')
+                    spotDict[line[0][27:-1]][0] = False
 
 
         # for each in reader:

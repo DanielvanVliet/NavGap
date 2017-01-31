@@ -137,11 +137,11 @@ def createUI():
     running = True
     WIDTH, HEIGHT = 420, 300
     root = tkinter.Tk()
-    bgImage = tkinter.PhotoImage(file='background.gif')
+    #bgImage = tkinter.PhotoImage(file='background.gif')
     canvas = tkinter.Canvas(root, width=WIDTH, height=HEIGHT)
     canvas.pack()
 
-    background = canvas.create_image((WIDTH/2),(HEIGHT/2), image=bgImage)
+    #background = canvas.create_image((WIDTH/2),(HEIGHT/2), image=bgImage)
     #root.overrideredirect(True)
     #root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
 
