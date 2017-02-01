@@ -118,65 +118,65 @@ def updateList():
     updateCmd = 'sudo iwlist wlan0 scan |grep -e Signal -e ESSID'
 
     trueCount = 0
-    ## use this when testing on pi
-    # result = subprocess.getoutput(updateCmd)
-    # if len(result) > 0:
-    #     userList = []
-    #     for spot in spotDict:
-    #         row = 0
-    #         for line in result.split('\n'):
-    #             row += 1
-    #             essid = line[27:-1]
-    #             signal = line[49:51]
-    #             #print(essid)
-    #             #print(signal)
-    #             if row % 2 == 1:
-    #                 rowdata = signal
-    #                 #print(rowdata)
-    #             if essid == spot and int(rowdata) <= 70: # -75 = range limiter
-    #                 print('{} set to true, breaking for loop, current str: {}'.format(essid, rowdata))
-    #                 spotDict[spot][0] = True
-    #                 spotDict[spot][1] = rowdata
-    #                 userList.append(essid)
-    #                 appendLog("setting spot '{}' to True in spotDict".format(spot), updateList.__name__)
-    #                 break
-    #             else:
-    #                 if spotDict[spot][0] == True and essid == spot:
-    #                     print('{} set to false, last str: {}'.format(essid, rowdata))
-    #                 spotDict[spot][0] = False
-    #                 #print('{} set to false'.format(essid))
-    #                 appendLog("setting spot '{}' to False in spotDict".format(spot), updateList.__name__)
-    # print('user inbetween: {}'.format(userList))
-
-    ## this is for pc testing, rips info from old log
-    # if os.name == 'nt':
-    userList = []
-    for spot in spotDict:
-        #print(' | Connection: {:15}: {}, strength: {}'.format(spot, spotDict[spot][0], spotDict[spot][1]))
-        with open('log.csv', 'r') as file:
-            reader = csv.reader(file)
+    # use this when testing on pi
+    result = subprocess.getoutput(updateCmd)
+    if len(result) > 0:
+        userList = []
+        for spot in spotDict:
             row = 0
-            for line in reader:
+            for line in result.split('\n'):
                 row += 1
-                essid = line[0][27:-1]
-                signal = line[0][49:51]
-                #print(spot)
+                essid = line[27:-1]
+                signal = line[49:51]
                 #print(essid)
+                #print(signal)
                 if row % 2 == 1:
                     rowdata = signal
                     #print(rowdata)
-                if essid == spot and int(rowdata) <= 75: # range limiter
-                    if spotDict[spot][0] == False:
-                        #print('{} found, set to true'.format(essid))
-                        spotDict[spot][0] = True
-                        spotDict[spot][1] = rowdata
-                        userList.append(essid)
+                if essid == spot and int(rowdata) <= 70: # -75 = range limiter
+                    print('{} set to true, breaking for loop, current str: {}'.format(essid, rowdata))
+                    spotDict[spot][0] = True
+                    spotDict[spot][1] = rowdata
+                    userList.append(essid)
+                    appendLog("setting spot '{}' to True in spotDict".format(spot), updateList.__name__)
                     break
                 else:
+                    if spotDict[spot][0] == True and essid == spot:
+                        print('{} set to false, last str: {}'.format(essid, rowdata))
                     spotDict[spot][0] = False
                     #print('{} set to false'.format(essid))
-    #print('user inbetween: {}'.format(userList))
-    appendLog("user location = {}".format(userList), createUI.__name__)
+                    appendLog("setting spot '{}' to False in spotDict".format(spot), updateList.__name__)
+    print('user inbetween: {}'.format(userList))
+
+    ## this is for pc testing, rips info from old log
+    # if os.name == 'nt':
+    # userList = []
+    # for spot in spotDict:
+    #     #print(' | Connection: {:15}: {}, strength: {}'.format(spot, spotDict[spot][0], spotDict[spot][1]))
+    #     with open('log.csv', 'r') as file:
+    #         reader = csv.reader(file)
+    #         row = 0
+    #         for line in reader:
+    #             row += 1
+    #             essid = line[0][27:-1]
+    #             signal = line[0][49:51]
+    #             #print(spot)
+    #             #print(essid)
+    #             if row % 2 == 1:
+    #                 rowdata = signal
+    #                 #print(rowdata)
+    #             if essid == spot and int(rowdata) <= 75: # range limiter
+    #                 if spotDict[spot][0] == False:
+    #                     #print('{} found, set to true'.format(essid))
+    #                     spotDict[spot][0] = True
+    #                     spotDict[spot][1] = rowdata
+    #                     userList.append(essid)
+    #                 break
+    #             else:
+    #                 spotDict[spot][0] = False
+    #                 #print('{} set to false'.format(essid))
+    # #print('user inbetween: {}'.format(userList))
+    # appendLog("user location = {}".format(userList), createUI.__name__)
 
 ## GUI ##
 blue = '#08088A'
