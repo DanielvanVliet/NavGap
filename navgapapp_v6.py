@@ -675,8 +675,8 @@ def createUI():
     canvas = tkinter.Canvas(root, width=WIDTH, height=HEIGHT)
     canvas.pack()
     background = canvas.create_image((WIDTH/2),(HEIGHT/2), image=bgImage)
-    # root.overrideredirect(True)
-    # root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
+    root.overrideredirect(True)
+    root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
     appendLog("creating UI with {}x, {}y, fullscreen. Backgroundimage = {}".format(WIDTH, HEIGHT, 'backgrond.gif'), createUI.__name__)
 
     appendLog("# creating grid", createUI.__name__)
