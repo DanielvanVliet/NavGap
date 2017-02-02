@@ -11,6 +11,9 @@ routeList = []
 
 End = ''
 
+sStrength = 57
+sCutoff = 80
+
 #spotdict name : [connection, strength, loc X, loc Y], node gets appended behind it once the script starts
 spotDict = {
     #primary pi's
@@ -133,7 +136,7 @@ def updateList():
                 if row % 2 == 1:
                     rowdata = signal
                     #print(rowdata)
-                if essid == spot and int(rowdata) <= 70: # -75 = range limiter
+                if essid == spot and int(rowdata) <= sCutoff: # -75 = range limiter
                     print('{} set to true, breaking for loop, current str: {}'.format(essid, rowdata))
                     spotDict[spot][0] = True
                     spotDict[spot][1] = rowdata
@@ -447,7 +450,7 @@ def updateUser(canvas, user, points):
                 newUserY = 50
 
         #print('new user coords: x{}, y{}'.format(newUserX, newUserY))
-        if sortedPointList[0][1] < 60:
+        if sortedPointList[0][1] < sStrength:
             newUserX, newUserY = point1x, point1y
             if sortedPointList[0][0] == End:
                 resetRoute()
@@ -675,8 +678,8 @@ def createUI():
     canvas = tkinter.Canvas(root, width=WIDTH, height=HEIGHT)
     canvas.pack()
     background = canvas.create_image((WIDTH/2),(HEIGHT/2), image=bgImage)
-    root.overrideredirect(True)
-    root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
+    # root.overrideredirect(True)
+    # root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
     appendLog("creating UI with {}x, {}y, fullscreen. Backgroundimage = {}".format(WIDTH, HEIGHT, 'backgrond.gif'), createUI.__name__)
 
     appendLog("# creating grid", createUI.__name__)
