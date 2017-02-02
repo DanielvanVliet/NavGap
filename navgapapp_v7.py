@@ -11,83 +11,83 @@ routeList = []
 End = ''
 
 #spotdict name : [connection, strength, loc X, loc Y], node gets appended behind it once the script starts
-spotDict = {
-    #primary pi's
-    'RPI_AP1' : [False, 0, 95, 80],
-    'RPI_AP2' : [False, 0, 170, 80],
-    'RPI_AP3' : [False, 0, 170, 160],
-    'RPI_AP4' : [False, 0, 95, 160],
-    'RPI_DB' : [False, 0, 130, 120],
-
-    #extention pi's
-    'RPI_AP5' : [False, 0, 130, 190],
-    'RPI_AP6' : [False, 0, 95, 225],
-    'RPI_AP7' : [False, 0, 170, 225],
-    'RPI_AP8' : [False, 0, 240 , 160],
-    'RPI_AP9' : [False, 0, 200, 120],
-    'RPI_AP10' : [False, 0, 240, 80],
-    'RPI_AP11' : [False, 0, 265, 120],
-    'RPI_AP12' : [False, 0, 295 , 160],
-    'RPI_AP13' : [False, 0, 295, 80],
-    'RPI_AP14' : [False, 0, 200, 60],
-    'RPI_AP15' : [False, 0, 225, 40],
-    'RPI_AP16' : [False, 0, 170 , 40],
-    'RPI_AP17' : [False, 0, 130, 60],
-    'RPI_AP18' : [False, 0, 95, 40]
-}
+# spotDict = {
+#     #primary pi's
+#     'RPI_AP1' : [False, 0, 95, 80],
+#     'RPI_AP2' : [False, 0, 170, 80],
+#     'RPI_AP3' : [False, 0, 170, 160],
+#     'RPI_AP4' : [False, 0, 95, 160],
+#     'RPI_DB' : [False, 0, 130, 120],
+#
+#     #extention pi's
+#     'RPI_AP5' : [False, 0, 130, 190],
+#     'RPI_AP6' : [False, 0, 95, 225],
+#     'RPI_AP7' : [False, 0, 170, 225],
+#     'RPI_AP8' : [False, 0, 240 , 160],
+#     'RPI_AP9' : [False, 0, 200, 120],
+#     'RPI_AP10' : [False, 0, 240, 80],
+#     'RPI_AP11' : [False, 0, 265, 120],
+#     'RPI_AP12' : [False, 0, 295 , 160],
+#     'RPI_AP13' : [False, 0, 295, 80],
+#     'RPI_AP14' : [False, 0, 200, 60],
+#     'RPI_AP15' : [False, 0, 225, 40],
+#     'RPI_AP16' : [False, 0, 170 , 40],
+#     'RPI_AP17' : [False, 0, 130, 60],
+#     'RPI_AP18' : [False, 0, 95, 40]
+# }
 
 e = 'RPI_AP'
 
-connectDict = {
-    #primary pi's
-    'RPI_AP1' : ['RPI_AP2', 'RPI_AP4', 'RPI_AP18', 'RPI_AP17'],
-    'RPI_AP2' : ['RPI_AP1', 'RPI_AP17', 'RPI_AP16', e+'14', e+'10', e+'9', e+'3', 'RPI_DB'],
-    'RPI_AP3' : [e+'7', e+'5', e+'4', 'RPI_DB', e+'2', e+'9', e+'8'],
-    'RPI_AP4' : [e+'3', e+'5', e+'6', e+'1'],
-    'RPI_DB' :  [e+'2', e+'17', e+'9', e+'3', e+'5'],
-
-    #extention pi's
-    'RPI_AP5' : [e+'6', e+'4', 'RPI_DB', e+'3', e+'7'],
-    'RPI_AP6' : [e+'4', e+'5', e+'7'],
-    'RPI_AP7' : [e+'6', e+'5', e+'3'],
-    'RPI_AP8' : [e+'3', e+'9', e+'10', e+'11', e+'12'],
-    'RPI_AP9' : ['RPI_DB', e+'2', e+'14', e+'10', e+'11', e+'8', e+'3'],
-    'RPI_AP10' : [e+'2', e+'14', e+'10', e+'13', e+'11', e+'9', e+'8'],
-    'RPI_AP11' : [e+'9', e+'10', e+'13', e+'12', e+'8'],
-    'RPI_AP12' : [e+'8', e+'11', e+'13'],
-    'RPI_AP13' : [e+'10', e+'11', e+'12'],
-    'RPI_AP14' : [e+'17', e+'16', e+'15', e+'10', e+'9', e+'2'],
-    'RPI_AP15' : [e+'16', e+'14'],
-    'RPI_AP16' : [e+'18', e+'15', e+'14', e+'2', e+'17'],
-    'RPI_AP17' : [e+'18', e+'16', e+'14', e+'2', 'RPI_DB', e+'1'],
-    'RPI_AP18' : [e+'1', e+'17', e+'16']
-}
+# connectDict = {
+#     #primary pi's
+#     'RPI_AP1' : ['RPI_AP2', 'RPI_AP4', 'RPI_AP18', 'RPI_AP17'],
+#     'RPI_AP2' : ['RPI_AP1', 'RPI_AP17', 'RPI_AP16', e+'14', e+'10', e+'9', e+'3', 'RPI_DB'],
+#     'RPI_AP3' : [e+'7', e+'5', e+'4', 'RPI_DB', e+'2', e+'9', e+'8'],
+#     'RPI_AP4' : [e+'3', e+'5', e+'6', e+'1'],
+#     'RPI_DB' :  [e+'2', e+'17', e+'9', e+'3', e+'5'],
+#
+#     #extention pi's
+#     'RPI_AP5' : [e+'6', e+'4', 'RPI_DB', e+'3', e+'7'],
+#     'RPI_AP6' : [e+'4', e+'5', e+'7'],
+#     'RPI_AP7' : [e+'6', e+'5', e+'3'],
+#     'RPI_AP8' : [e+'3', e+'9', e+'10', e+'11', e+'12'],
+#     'RPI_AP9' : ['RPI_DB', e+'2', e+'14', e+'10', e+'11', e+'8', e+'3'],
+#     'RPI_AP10' : [e+'2', e+'14', e+'10', e+'13', e+'11', e+'9', e+'8'],
+#     'RPI_AP11' : [e+'9', e+'10', e+'13', e+'12', e+'8'],
+#     'RPI_AP12' : [e+'8', e+'11', e+'13'],
+#     'RPI_AP13' : [e+'10', e+'11', e+'12'],
+#     'RPI_AP14' : [e+'17', e+'16', e+'15', e+'10', e+'9', e+'2'],
+#     'RPI_AP15' : [e+'16', e+'14'],
+#     'RPI_AP16' : [e+'18', e+'15', e+'14', e+'2', e+'17'],
+#     'RPI_AP17' : [e+'18', e+'16', e+'14', e+'2', 'RPI_DB', e+'1'],
+#     'RPI_AP18' : [e+'1', e+'17', e+'16']
+# }
 
 #graph = {'RPI_AP1':{'RPI_AP2':1, 'RPI_AP3':3, 'RPI_DB': 1}}
-graph = {
-    #primary pi's
-    'RPI_AP1' : {'RPI_AP2':1, 'RPI_AP4':1, 'RPI_AP18':1, 'RPI_AP17':0.75},
-    'RPI_AP2' : {'RPI_AP1':1, 'RPI_AP17':0.75, 'RPI_AP16':1, e+'14':0.75, e+'10':1, e+'9':0.75, e+'3':1, 'RPI_DB':0.75},
-    'RPI_AP3' : {e+'7':1, e+'5':0.75, e+'4':1, 'RPI_DB':0.75, e+'2':1, e+'9':0.75, e+'8':1},
-    'RPI_AP4' : {e+'3':1, e+'5':0.75, e+'6':1, e+'1':1},
-    'RPI_DB' :  {e+'2':0.75, e+'17':1, e+'9':1, e+'3':0.75, e+'5':1},
-
-    #extention pi's
-    'RPI_AP5' : {e+'6':0.75, e+'4':0.75, 'RPI_DB':1, e+'3':0.75, e+'7':0.75},
-    'RPI_AP6' : {e+'4':1, e+'5':0.75, e+'7':1},
-    'RPI_AP7' : {e+'6':1, e+'5':0.75, e+'3':1},
-    'RPI_AP8' : {e+'3':1, e+'9':0.75, e+'10':1, e+'11':0.75, e+'12':1},
-    'RPI_AP9' : {'RPI_DB':1, e+'2':0.75, e+'14':1, e+'10':0.75, e+'11':1, e+'8':0.75, e+'3':0.75},
-    'RPI_AP10' : {e+'2':1, e+'14':0.75, e+'10':1, e+'13':1, e+'11':0.75, e+'9':0.75,e+'8':1},
-    'RPI_AP11' : {e+'9':1, e+'10':0.75, e+'13':0.75, e+'12':0.75, e+'8':0.75},
-    'RPI_AP12' : {e+'8':1, e+'11':0.75, e+'13':1},
-    'RPI_AP13' : {e+'10':1, e+'11':0.75, e+'12':1},
-    'RPI_AP14' : {e+'17':1, e+'16':0.75, e+'15':0.75, e+'10':0.75, e+'9':1, e+'2':0.75},
-    'RPI_AP15' : {e+'16':1, e+'14':0.75},
-    'RPI_AP16' : {e+'18':1, e+'15':1, e+'14':0.75, e+'2':1, e+'17':1},
-    'RPI_AP17' : {e+'18':0.75, e+'16':0.75, e+'14':1, e+'2':0.75, 'RPI_DB':1, e+'1':0.75},
-    'RPI_AP18' : {e+'1':1, e+'17':0.75, e+'16':1}
-}
+# graph = {
+#     #primary pi's
+#     'RPI_AP1' : {'RPI_AP2':1, 'RPI_AP4':1, 'RPI_AP18':1, 'RPI_AP17':0.75},
+#     'RPI_AP2' : {'RPI_AP1':1, 'RPI_AP17':0.75, 'RPI_AP16':1, e+'14':0.75, e+'10':1, e+'9':0.75, e+'3':1, 'RPI_DB':0.75},
+#     'RPI_AP3' : {e+'7':1, e+'5':0.75, e+'4':1, 'RPI_DB':0.75, e+'2':1, e+'9':0.75, e+'8':1},
+#     'RPI_AP4' : {e+'3':1, e+'5':0.75, e+'6':1, e+'1':1},
+#     'RPI_DB' :  {e+'2':0.75, e+'17':1, e+'9':1, e+'3':0.75, e+'5':1},
+#
+#     #extention pi's
+#     'RPI_AP5' : {e+'6':0.75, e+'4':0.75, 'RPI_DB':1, e+'3':0.75, e+'7':0.75},
+#     'RPI_AP6' : {e+'4':1, e+'5':0.75, e+'7':1},
+#     'RPI_AP7' : {e+'6':1, e+'5':0.75, e+'3':1},
+#     'RPI_AP8' : {e+'3':1, e+'9':0.75, e+'10':1, e+'11':0.75, e+'12':1},
+#     'RPI_AP9' : {'RPI_DB':1, e+'2':0.75, e+'14':1, e+'10':0.75, e+'11':1, e+'8':0.75, e+'3':0.75},
+#     'RPI_AP10' : {e+'2':1, e+'14':0.75, e+'10':1, e+'13':1, e+'11':0.75, e+'9':0.75,e+'8':1},
+#     'RPI_AP11' : {e+'9':1, e+'10':0.75, e+'13':0.75, e+'12':0.75, e+'8':0.75},
+#     'RPI_AP12' : {e+'8':1, e+'11':0.75, e+'13':1},
+#     'RPI_AP13' : {e+'10':1, e+'11':0.75, e+'12':1},
+#     'RPI_AP14' : {e+'17':1, e+'16':0.75, e+'15':0.75, e+'10':0.75, e+'9':1, e+'2':0.75},
+#     'RPI_AP15' : {e+'16':1, e+'14':0.75},
+#     'RPI_AP16' : {e+'18':1, e+'15':1, e+'14':0.75, e+'2':1, e+'17':1},
+#     'RPI_AP17' : {e+'18':0.75, e+'16':0.75, e+'14':1, e+'2':0.75, 'RPI_DB':1, e+'1':0.75},
+#     'RPI_AP18' : {e+'1':1, e+'17':0.75, e+'16':1}
+# }
 
 userList = []
 
@@ -144,13 +144,13 @@ def import_graph():
 	connection.close()
 	return graph
 
-#graph = import_graph()
-# connectDict = {}
-# for each in graph:
-#     connectDict[each] = []
-#     for neighbor in graph.get(each):
-#         connectDict[each].append(neighbor)
-#spotDict = import_SSID()
+graph = import_graph()
+connectDict = {}
+for each in graph:
+    connectDict[each] = []
+    for neighbor in graph.get(each):
+        connectDict[each].append(neighbor)
+spotDict = import_SSID()
 
 
 
