@@ -1,8 +1,13 @@
 import pymysql.cursors
 
 def import_graph():
-	connection = pymysql.connect(host='localhost',
-				     user='root',
+	"""
+	Imports information from database and orders it in a dictionary that the dijkstra algorithm can work with.
+	:return:
+	A dictionary with for each node another dictionary with the nodes connected to that node and the distance between them.
+	"""
+	connection = pymysql.connect(host='192.168.0.2',
+				     user='monitor',
 				     password='navgap',
 				     db='navgapdb',
 				     charset='utf8mb4')
