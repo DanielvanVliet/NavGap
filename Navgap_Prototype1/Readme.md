@@ -1,11 +1,13 @@
 NavGap Indoors Navigatiesysteem
 
+Het programma maakt gebruik van linux commando's en een linux os is dus vereist
+
 De volgende python modules zijn vereist en moeten geïnstalleerd worden op de pi:
 tkinter
 subprocess
 
 Op de pi moet git staan en het project moet worden gecloned naar de pi.
-Ook is er een scherm / vnc vereist om de tkinter gui te weergeven.
+Ook is er een scherm / vnc vereist om de tkinter gui te weergeven (als het op de pi gedraaid wordt)
 
 Om het navigatiesysteem op te stellen moet het volgende gebeuren:
 Indien er met database gewerkt wordt moet de database aangesloten zijn op de navgapapp; hostname en username en password moeten ingevoerd worden in de navgapapp.
