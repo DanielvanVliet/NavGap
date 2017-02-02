@@ -3,7 +3,7 @@ import os
 import time
 import tkinter
 import subprocess
-import pymysql.cursors
+#import pymysql.cursors
 #import commands
 
 routeList = []
@@ -92,23 +92,24 @@ e = 'RPI_AP'
 userList = []
 
 def import_SSID():
-	connection = pymysql.connect(host='192.168.0.2',
+    """
+    Imports each node from the database with their x and y locations for the spotDict in the correct form.
+    :return:
+    spotDict, a dictionary with each node and their x and y locations on the canvas.
+    """
+    connection = pymysql.connect(host='192.168.0.2',
 					 user='monitor',
 					 password='navgap',
 					 db='navgapdb',
 					 charset='utf8mb4')
+    curs = connection.cursor()
+    spotDict = {}
+    curs.execute("SELECT * FROM Locations")
+    connection.commit()
 
-
-	curs = connection.cursor()
-
-	#Imports ssid from db into python dictionary
-	spotDict = {}
-	curs.execute("SELECT * FROM Locations")
-	connection.commit()
-
-	for row in curs.fetchall():
-		spotDict[row[0]] = [False, 0, row[1], row[2]]
-	return spotDict
+    for row in curs.fetchall():
+        spotDict[row[0]] = [False, 0, row[1], row[2]]
+    return spotDict
 
 def import_graph():
 	"""
@@ -146,6 +147,7 @@ def import_graph():
 
 graph = import_graph()
 connectDict = {}
+#Imports connectDict from the graph
 for each in graph:
     connectDict[each] = []
     for neighbor in graph.get(each):
