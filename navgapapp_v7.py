@@ -152,6 +152,9 @@ for each in graph:
         connectDict[each].append(neighbor)
 spotDict = import_SSID()
 
+print(graph)
+print(connectDict)
+print(spotDict)
 
 
 
